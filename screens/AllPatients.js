@@ -4,41 +4,48 @@ import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, ScrollView, 
 import DropDownPicker from 'react-native-dropdown-picker';
 
 const AllPatientsScreen = ({ navigation }) => {
+  //
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState();
   const [patientData, setPatientData] = useState();
-  const FETCHAPILINK = 'https://6b0f-99-211-193-59.ngrok.io/patients'; 
+  
+  //this will be the link to server for fetch commands, https://localhost:4000/patients
+  const FETCHAPILINK = 'https://6b0f-99-211-193-59.ngrok.io/patients'; //currently this link is a ngrok temporary public rebound IP for locahost
+  //It was used for testing purposes until server is properly hosted online, code works as expected, once web server is fully hosted online,
+  //app will be able to act as front-end fully.
 
+  //drop down list items
   const items = [
     {label: 'Normal', value: 'Normal'},
     {label: 'Critical', value: 'Critical'},
     {label: 'No Filter', value: ''}
   ] 
 
+  //Fetch all patients who are in the asked for condition: "Critical" or "Normal"
   const getPatientsWithCondition = async(filterCondition)=>{
-    console.log("Searchingr")
+    console.log("Searching...")
+    //used thgis endpoint for easy searching and differentiate from get patients/ endpoint 
     await fetch((FETCHAPILINK + '/search/condition/' + filterCondition ), {
-      method: 'GET'
-    }).
-    then((response) => response.json()).
-    then((json) => {
+      method: 'GET' //use get method
+    }).then((response) => response.json()).then((json) => {
      //console.log(json);
       const temp_data_hold = json.map(item => item);
       setPatientData(temp_data_hold);
      })
-    .catch((error) => {
-      console.log(error);     
+    .catch((getWithConditionError) => {
+      console.log(getWithConditionError);     
     }) 
   }
 
   //delete all functionality integration with 713 API
   const whenFilterConditionChosen = async ()=>{
-    //let currentValue1 = currentValue
+    
+    //below if statements used to curb errors, and prevent multiple repeated calls to API
     if (currentValue !== '' && currentValue !== null && currentValue !== undefined) {
       console.log("Condition Search: " + currentValue)
-       getPatientsWithCondition(currentValue);
+       getPatientsWithCondition(currentValue);//search for patients with contion if there is a filter
     }else if(currentValue === '' || currentValue == undefined ){
-      console.log("---")
+      console.log("No Filter Selected")//if not just display all patients
      getAllPatientData();
     }
   }
@@ -47,16 +54,14 @@ const AllPatientsScreen = ({ navigation }) => {
   const getAllPatientData = async()=>{
     //replace with proper api ip
     await fetch(FETCHAPILINK , {
-      method: 'GET'
-    }).
-    then((response) => response.json()).
-    then((json) => {
+      method: 'GET' //use get method
+    }).then((response) => response.json()).then((json) => {
      //console.log(json);
      const temp_data_hold = json.map(item => item);
       setPatientData(temp_data_hold);
      })
-    .catch((error) => {
-      console.log(error);     
+    .catch((getAllError) => {
+      console.log(getAllError);     
     })
   }
 
@@ -65,22 +70,21 @@ const AllPatientsScreen = ({ navigation }) => {
     
     await fetch(FETCHAPILINK, {
       method: 'DELETE'
-    }).
-    then((response) => response.json()).
-    then((json) => {
-      alert("!All Patient Data Deleted!")
+    }).then((response) => response.json()).then((json) => {
+      alert("!All Patient Data Deleted!")//alert to indicate files have been deleted
       console.log(json);
-      setPatientData(); //update state to refresh page to show deleted data
-     })
-    .catch((error) => {
-      console.log(error);     
+      setPatientData(); //update state to refresh page to show that data has been deleted
+     }).catch((DeleteAllError) => {
+      console.log(DeleteAllError);     
     })
   }
 
+  //used to immediately display all patients upon screen being loaded
   useEffect(()=>{
     getAllPatientData();
   }, []);
 
+  {/*Use to display each found patient in the list*/}
   const PatientDisplayCard = ({patient}) =>(
     <View style={styles.card}>
       <View style={[styles.carddetailwrapper, styles.flexcss]}>
@@ -115,20 +119,20 @@ const AllPatientsScreen = ({ navigation }) => {
     {/* dropdown and button container */}
     <View style={[styles.topbarcontainer,  styles.flexcss]}>
       <View style={[styles.leftdropdown, styles.innerbox]}>
-        <DropDownPicker 
-        style={styles.dropdownstyle}
-        items={items}
-        open={isOpen}
-        setOpen={() => setIsOpen(!isOpen)}
-        value={currentValue}
-        setValue={(val)=>setCurrentValue(val)}  
-        autoScroll
-        placeholder='Select Condition'
-        />
+          <DropDownPicker 
+          style={styles.dropdownstyle}
+          items={items}
+          open={isOpen}
+          setOpen={() => setIsOpen(!isOpen)}
+          value={currentValue}
+          setValue={(val)=>setCurrentValue(val)}  
+          autoScroll
+          placeholder='Select Condition'
+          />
       </View>{/* setCurrentValue(val) */}
-      <View  >
-        <TouchableOpacity  onPress={whenFilterConditionChosen}>
-          <Text >   Filter</Text>
+      <View>{/*Use of this touchable opacity to all for easy integration of filter searches iusing patient condition*/}
+        <TouchableOpacity onPress={whenFilterConditionChosen}>
+          <Text style={styles.filterTOText}>Filter</Text> 
         </TouchableOpacity>
       </View>
       <View style={[styles.deletebtncontainer, styles.innerbox]} >
@@ -230,6 +234,18 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     zIndex: 1
   },
+
+  //filter TO Text css
+  filterTOText:{
+      padding: 12,
+      paddingBottom: 15,
+      paddingTop: 15,
+      borderWidth: 1,
+      borderRadius: 8,
+      borderColor: "white",
+      backgroundColor: '#6B81DC',
+      color: 'white'
+  },
   // Delete button css
   deletebtncontainer: {
     width: '100%',
@@ -242,7 +258,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#323232',
+    borderColor: 'red',
     width: '70%',
     paddingTop: 12,
     paddingBottom: 12,
@@ -252,7 +268,7 @@ const styles = StyleSheet.create({
     paddingRight: 10
   },
   dltbuttonText: {
-    color: '#323232',
+    color: 'red',
     fontSize: 12,
     fontWeight: '700',
     paddingLeft:10,

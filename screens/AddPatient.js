@@ -32,8 +32,8 @@ const AddPatient = ({ navigation }) => {
         setChosenDate(currentDate);
     };
 
-    
-    const addNewPatient = async()=>{//not functional with APIr
+    /*
+    const addNewPatient = async()=>{//not functional with API 
         await fetch(FETCHAPILINK, {
             method: 'POST',
             headers: {
@@ -60,7 +60,7 @@ const AddPatient = ({ navigation }) => {
         .catch((error) => {
           console.log(error);     
         });
-    }
+    }*/
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
