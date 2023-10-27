@@ -1,19 +1,49 @@
 // DetailsScreen.js
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, ScrollView, Button} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 const AllPatientsScreen = ({ navigation }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState();
   const [patientData, setPatientData] = useState();
-  const FETCHAPILINK = 'https://218e-99-211-193-59.ngrok.io/patients'; 
+  const FETCHAPILINK = 'https://6b0f-99-211-193-59.ngrok.io/patients'; 
 
   const items = [
-    {label: 'Normal', value: 'normal'},
-    {label: 'Critical', value: 'critical'},
+    {label: 'Normal', value: 'Normal'},
+    {label: 'Critical', value: 'Critical'},
+    {label: 'No Filter', value: ''}
   ] 
 
+  const getPatientsWithCondition = async(filterCondition)=>{
+    console.log("Searchingr")
+    await fetch((FETCHAPILINK + '/search/condition/' + filterCondition ), {
+      method: 'GET'
+    }).
+    then((response) => response.json()).
+    then((json) => {
+     //console.log(json);
+      const temp_data_hold = json.map(item => item);
+      setPatientData(temp_data_hold);
+     })
+    .catch((error) => {
+      console.log(error);     
+    }) 
+  }
+
+  //delete all functionality integration with 713 API
+  const whenFilterConditionChosen = async ()=>{
+    //let currentValue1 = currentValue
+    if (currentValue !== '' && currentValue !== null && currentValue !== undefined) {
+      console.log("Condition Search: " + currentValue)
+       getPatientsWithCondition(currentValue);
+    }else if(currentValue === '' || currentValue == undefined ){
+      console.log("---")
+     getAllPatientData();
+    }
+  }
+
+  //Fetch all patients functionality integration with 713 API--
   const getAllPatientData = async()=>{
     //replace with proper api ip
     await fetch(FETCHAPILINK , {
@@ -30,8 +60,8 @@ const AllPatientsScreen = ({ navigation }) => {
     })
   }
 
+  //delete all patients functionality integration with 713 API--
   const deleteAllPatientData = async ()=>{
-    //replace with proper api ip
     
     await fetch(FETCHAPILINK, {
       method: 'DELETE'
@@ -65,7 +95,7 @@ const AllPatientsScreen = ({ navigation }) => {
                   <Text style={[styles.cardtext, styles.boldtext]}>Id: {patient.patientId}</Text>
                 </View>
                 <View style={styles.patientcondition}>
-                  <Text style={[styles.cardtext, styles.lighttext]}>Condition: <Text style={[styles.lighttext, styles.cardtext, styles.boldcardtext, styles.boldtext]}>Medium</Text></Text>
+                  <Text style={[styles.cardtext, styles.lighttext]}>Condition: <Text style={[styles.lighttext, styles.cardtext, styles.boldcardtext, styles.boldtext]}>{patient.condition}</Text></Text>
                 </View>
             </View>
           </View>
@@ -91,10 +121,15 @@ const AllPatientsScreen = ({ navigation }) => {
         open={isOpen}
         setOpen={() => setIsOpen(!isOpen)}
         value={currentValue}
-        setValue={(val) => setCurrentValue(val)}
+        setValue={(val)=>setCurrentValue(val)}  
         autoScroll
         placeholder='Select Condition'
         />
+      </View>{/* setCurrentValue(val) */}
+      <View  >
+        <TouchableOpacity  onPress={whenFilterConditionChosen}>
+          <Text >   Filter</Text>
+        </TouchableOpacity>
       </View>
       <View style={[styles.deletebtncontainer, styles.innerbox]} >
         <TouchableOpacity style={styles.deletebutton} onPress={deleteAllPatientData}>
@@ -103,22 +138,15 @@ const AllPatientsScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
     </View>
-    
     {/*<ScrollView>*/}
     <View style={styles.innercontainer}>
       {/* List section */}
-      <View style={styles.cardwrapper} >
-      <FlatList
-        data={patientData}
-        renderItem={({item}) => < PatientDisplayCard patient={item}  />}
-        keyExtractor={item => item._id}
-      />
-
-
-        {/*  Single Card */}
-        
-
-        
+      <View style={styles.cardwrapper} >      
+        <FlatList
+          data={patientData}
+          renderItem={({item}) => < PatientDisplayCard patient={item}  />}
+          keyExtractor={item => item._id}
+        />  
       </View>
     </View>
     {/*</ScrollView>*/}
@@ -146,7 +174,7 @@ const styles = StyleSheet.create({
     fontSize: 14.5
   },
   innerbox: {
-    width: '50%',
+    width: '40%',
   },
   // Card css
   flexcss: {
@@ -244,7 +272,7 @@ const styles = StyleSheet.create({
     marginBottom: 12
   },
   dropdownstyle: {
-    zIndex: 9,
+    zIndex: 8,
   }
 });
 
