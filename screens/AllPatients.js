@@ -7,7 +7,7 @@ const AllPatientsScreen = ({ navigation }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState();
   const [patientData, setPatientData] = useState();
-  const FETCHAPILINK = 'https://b9aa-99-211-193-59.ngrok.io/patients'; 
+  const FETCHAPILINK = 'https://218e-99-211-193-59.ngrok.io/patients'; 
 
   const items = [
     {label: 'Normal', value: 'normal'},

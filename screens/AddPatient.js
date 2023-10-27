@@ -33,7 +33,7 @@ const AddPatient = ({ navigation }) => {
     };
 
     
-    const addNewPatient = async()=>{
+    const addNewPatient = async()=>{//not functional with APIr
         await fetch(FETCHAPILINK, {
             method: 'POST',
             headers: {
