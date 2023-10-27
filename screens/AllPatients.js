@@ -104,7 +104,7 @@ const AllPatientsScreen = ({ navigation }) => {
       </View>
     </View>
     
-    <ScrollView>
+    {/*<ScrollView>*/}
     <View style={styles.innercontainer}>
       {/* List section */}
       <View style={styles.cardwrapper} >
@@ -121,7 +121,7 @@ const AllPatientsScreen = ({ navigation }) => {
         
       </View>
     </View>
-    </ScrollView>
+    {/*</ScrollView>*/}
   </View>
   );
 };
