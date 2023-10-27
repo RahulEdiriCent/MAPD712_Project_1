@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     viewbtntxt: {
         color: '#fff',
         fontSize: 14,
-        fontWeight: 600,
+        fontWeight: '600',
         textAlign: 'center'
     },
 });

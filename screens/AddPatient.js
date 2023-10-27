@@ -7,27 +7,60 @@ import RadioButtonGroup from '../components/RadioButtonGroup';
 
 
 const AddPatient = ({ navigation }) => {
+    const FETCHAPILINK = 'https://b9aa-99-211-193-59.ngrok.io/patients'; 
 
-
-
-    const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] = useState('');
+    const [patientId, setPateintId] = useState(0);
+    const [firstName, setFirstname] = useState('');
+    const [lastName, setLastname] = useState('');
     const [address, setAddress] = useState('');
     const [age, setAge] = useState('');
     const [phonenumber, setPhonenumber] = useState('');
     const [department, setDepartment] = useState('');
+    const [condition, setCondition] = useState('');
     const [doctor, setDoctor] = useState('');
     const [gender, setRadioValue] = useState('');
     const genders= ['Male', 'Female'];
+    const conditions=['Normal','Critical'];
     // Date picker value
-    const [chosenDate, setChosenDate] = useState(new Date());
+
+    const [DOB, setChosenDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
 
     const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || chosenDate;
+        const currentDate = selectedDate || DOB;
         setShowDatePicker(false);
         setChosenDate(currentDate);
     };
+
+    
+    const addNewPatient = async()=>{
+        await fetch(FETCHAPILINK, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                patientId: patientId, //change later to be auto-number
+                firstName: firstName,
+                lastName: lastName,
+                age: age,
+                gender:gender,
+                address: address,
+                date_of_birth: DOB,
+                department: department,
+                condition:  condition, //temp placement here as to allow for condition handling
+                doctor:  doctor
+            }),
+        }).then((response) => response.json()).then((json) => {
+            //console.log(json);
+            alert("Patient Added");
+            console.log("Patient Added");
+         })
+        .catch((error) => {
+          console.log(error);     
+        });
+    }
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -40,7 +73,7 @@ const AddPatient = ({ navigation }) => {
                     <Text style={styles.inputlabel}>First Name</Text>
                     <TextInput
                         style={styles.input}
-                        value={firstname}
+                        value={firstName}
                         onChangeText={(text) => setFirstname(text)}
                         placeholder="Enter your first name"
                     />
@@ -50,7 +83,7 @@ const AddPatient = ({ navigation }) => {
                     <Text style={styles.inputlabel}>Last Name</Text>
                     <TextInput
                         style={styles.input}
-                        value={lastname}
+                        value={lastName}
                         onChangeText={(text) => setLastname(text)}
                         placeholder="Enter your last name"
                     />
@@ -81,7 +114,7 @@ const AddPatient = ({ navigation }) => {
                 <View style={styles.inputwrapper}>
                     <Text style={styles.inputlabel}>DOB</Text>
                     <DateTimePicker
-                        value={chosenDate}
+                        value={DOB}
                         mode="date"
                         is24Hour={true}
                         display="default"
@@ -132,7 +165,7 @@ const AddPatient = ({ navigation }) => {
                 </View>
 
                 <View style={styles.submitwrapper}>
-                    <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('ViewClinicalData')} >
+                    <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={addNewPatient()} > {/* => navigation.navigate('ViewClinicalData')*/}
                         <Text style={[styles.buttonText, styles.viewbtntxt]}>Add Patient</Text>
                     </TouchableOpacity> 
                 </View>
@@ -198,7 +231,7 @@ const styles = StyleSheet.create({
     viewbtntxt: {
         color: '#fff',
         fontSize: 14,
-        fontWeight: 600,
+        fontWeight: '600',
         textAlign: 'center'
     },
     radiostyle: {

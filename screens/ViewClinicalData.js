@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     dltbuttonText: {
         color: '#323232',
         fontSize: 12,
-        fontWeight: 700,
+        fontWeight: '700',
         paddingLeft:10,
     },
     // Banner css
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
         color: '#858585'
     },
     boldtext: {
-        fontWeight: 700
+        fontWeight: '700'
     },
     patientimage: {
         width: '100%',

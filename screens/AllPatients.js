@@ -1,222 +1,128 @@
 // DetailsScreen.js
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 const AllPatientsScreen = ({ navigation }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState();
+  const [patientData, setPatientData] = useState();
+  const FETCHAPILINK = 'https://b9aa-99-211-193-59.ngrok.io/patients'; 
 
   const items = [
     {label: 'Normal', value: 'normal'},
     {label: 'Critical', value: 'critical'},
   ] 
+
+  const getAllPatientData = async()=>{
+    //replace with proper api ip
+    await fetch(FETCHAPILINK , {
+      method: 'GET'
+    }).
+    then((response) => response.json()).
+    then((json) => {
+     //console.log(json);
+     const temp_data_hold = json.map(item => item);
+      setPatientData(temp_data_hold);
+     })
+    .catch((error) => {
+      console.log(error);     
+    })
+  }
+
+  const deleteAllPatientData = async ()=>{
+    //replace with proper api ip
+    
+    await fetch(FETCHAPILINK, {
+      method: 'DELETE'
+    }).
+    then((response) => response.json()).
+    then((json) => {
+      alert("!All Patient Data Deleted!")
+      console.log(json);
+      setPatientData(); //update state to refresh page to show deleted data
+     })
+    .catch((error) => {
+      console.log(error);     
+    })
+  }
+
+  useEffect(()=>{
+    getAllPatientData();
+  }, []);
+
+  const PatientDisplayCard = ({patient}) =>(
+    <View style={styles.card}>
+      <View style={[styles.carddetailwrapper, styles.flexcss]}>
+           <View style={styles.imagewrapper}>
+              <Image source={require('../assets/images/patient-1.png')} style={styles.patientimage} />
+            </View>
+            <View style={styles.detailwrapper}>
+                <View style={styles.patientname}>
+                  <Text style={[styles.cardtext, styles.boldtext]}>Name: {patient.firstName + " " + patient.lastName} </Text>
+                </View>
+                <View style={styles.patientname}>
+                  <Text style={[styles.cardtext, styles.boldtext]}>Id: {patient.patientId}</Text>
+                </View>
+                <View style={styles.patientcondition}>
+                  <Text style={[styles.cardtext, styles.lighttext]}>Condition: <Text style={[styles.lighttext, styles.cardtext, styles.boldcardtext, styles.boldtext]}>Medium</Text></Text>
+                </View>
+            </View>
+          </View>
+          <View style={[styles.cardbtncontainer, styles.flexcss]}>
+            <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('PatientDetails')} id="delete">
+              <Text style={[styles.buttonText, styles.viewbtntxt]}>View</Text>
+            </TouchableOpacity> 
+            <TouchableOpacity style={[styles.cardbtn,styles.removebtn]}>
+              <Text style={[styles.buttonText,styles.removebtntxt]}>Remove</Text>
+            </TouchableOpacity>
+          </View>
+    </View>
+  );
+  
   return (
     <View style={styles.container}>
-      {/* dropdown and button container */}
-      <View style={[styles.topbarcontainer,  styles.flexcss]}>
-        <View style={[styles.leftdropdown, styles.innerbox]}>
-          <DropDownPicker 
-          style={styles.dropdownstyle}
-          items={items}
-          open={isOpen}
-          setOpen={() => setIsOpen(!isOpen)}
-          value={currentValue}
-          setValue={(val) => setCurrentValue(val)}
-          autoScroll
-          placeholder='Select Condition'
-          />
-        </View>
-        <View style={[styles.deletebtncontainer, styles.innerbox]}>
-          <TouchableOpacity style={styles.deletebutton}>
-            <Image source={require('../assets/images/delete-icon.png')} style={styles.deleteicon} />
-            <Text style={styles.dltbuttonText}>Delete All</Text>
-          </TouchableOpacity>
-        </View>
+    {/* dropdown and button container */}
+    <View style={[styles.topbarcontainer,  styles.flexcss]}>
+      <View style={[styles.leftdropdown, styles.innerbox]}>
+        <DropDownPicker 
+        style={styles.dropdownstyle}
+        items={items}
+        open={isOpen}
+        setOpen={() => setIsOpen(!isOpen)}
+        value={currentValue}
+        setValue={(val) => setCurrentValue(val)}
+        autoScroll
+        placeholder='Select Condition'
+        />
       </View>
-      
-      <ScrollView>
-      <View style={styles.innercontainer}>
-        {/* List section */}
-        <View style={styles.cardwrapper} >
-          {/*  Single Card */}
-          <View style={styles.card}>
-            <View style={[styles.carddetailwrapper, styles.flexcss]}>
-              <View style={styles.imagewrapper}>
-                <Image source={require('../assets/images/patient-1.png')} style={styles.patientimage} />
-              </View>
-              <View style={styles.detailwrapper}>
-                  <View style={styles.patientname}>
-                    <Text style={[styles.cardtext, styles.boldtext]}>Jenny Wilson</Text>
-                  </View>
-                  <View style={styles.patientcondition}>
-                    <Text style={[styles.cardtext, styles.lighttext]}>Condition: <Text style={[styles.lighttext, styles.cardtext, styles.boldcardtext, styles.boldtext]}>Medium</Text></Text>
-                  </View>
-              </View>
-            </View>
-            <View style={[styles.cardbtncontainer, styles.flexcss]}>
-              <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('PatientDetailes')} >
-                <Text style={[styles.buttonText, styles.viewbtntxt]}>View</Text>
-              </TouchableOpacity> 
-              <TouchableOpacity style={[styles.cardbtn,styles.removebtn]}>
-                <Text style={[styles.buttonText,styles.removebtntxt]}>Remove</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/*  Single Card */}
-          <View style={styles.card}>
-            <View style={[styles.carddetailwrapper, styles.flexcss]}>
-              <View style={styles.imagewrapper}>
-                <Image source={require('../assets/images/patient-2.png')} style={styles.patientimage} />
-              </View>
-              <View style={styles.detailwrapper}>
-                  <View style={styles.patientname}>
-                    <Text style={[styles.cardtext, styles.boldtext]}>Jenny Wilson</Text>
-                  </View>
-                  <View style={styles.patientcondition}>
-                    <Text style={[styles.cardtext, styles.lighttext]}>Condition: <Text style={[styles.lighttext, styles.cardtext, styles.boldcardtext, styles.boldtext]}>Medium</Text></Text>
-                  </View>
-              </View>
-            </View>
-            <View style={[styles.cardbtncontainer, styles.flexcss]}>
-              <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('PatientDetailes')} >
-                <Text style={[styles.buttonText, styles.viewbtntxt]}>View</Text>
-              </TouchableOpacity> 
-              <TouchableOpacity style={[styles.cardbtn,styles.removebtn]}>
-                <Text style={[styles.buttonText,styles.removebtntxt]}>Remove</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/*  Single Card */}
-          <View style={styles.card}>
-            <View style={[styles.carddetailwrapper, styles.flexcss]}>
-              <View style={styles.imagewrapper}>
-                <Image source={require('../assets/images/patient-3.png')} style={styles.patientimage} />
-              </View>
-              <View style={styles.detailwrapper}>
-                  <View style={styles.patientname}>
-                    <Text style={[styles.cardtext, styles.boldtext]}>Jenny Wilson</Text>
-                  </View>
-                  <View style={styles.patientcondition}>
-                    <Text style={[styles.cardtext, styles.lighttext]}>Condition: <Text style={[styles.lighttext, styles.cardtext, styles.boldcardtext, styles.boldtext]}>Medium</Text></Text>
-                  </View>
-              </View>
-            </View>
-            <View style={[styles.cardbtncontainer, styles.flexcss]}>
-              <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('PatientDetailes')} >
-                <Text style={[styles.buttonText, styles.viewbtntxt]}>View</Text>
-              </TouchableOpacity> 
-              <TouchableOpacity style={[styles.cardbtn,styles.removebtn]}>
-                <Text style={[styles.buttonText,styles.removebtntxt]}>Remove</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/*  Single Card */}
-          <View style={styles.card}>
-            <View style={[styles.carddetailwrapper, styles.flexcss]}>
-              <View style={styles.imagewrapper}>
-                <Image source={require('../assets/images/patient-4.png')} style={styles.patientimage} />
-              </View>
-              <View style={styles.detailwrapper}>
-                  <View style={styles.patientname}>
-                    <Text style={[styles.cardtext, styles.boldtext]}>Jenny Wilson</Text>
-                  </View>
-                  <View style={styles.patientcondition}>
-                    <Text style={[styles.cardtext, styles.lighttext]}>Condition: <Text style={[styles.lighttext, styles.cardtext, styles.boldcardtext, styles.boldtext]}>Medium</Text></Text>
-                  </View>
-              </View>
-            </View>
-            <View style={[styles.cardbtncontainer, styles.flexcss]}>
-              <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('PatientDetailes')} >
-                <Text style={[styles.buttonText, styles.viewbtntxt]}>View</Text>
-              </TouchableOpacity> 
-              <TouchableOpacity style={[styles.cardbtn,styles.removebtn]}>
-                <Text style={[styles.buttonText,styles.removebtntxt]}>Remove</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/*  Single Card */}
-          <View style={styles.card}>
-            <View style={[styles.carddetailwrapper, styles.flexcss]}>
-              <View style={styles.imagewrapper}>
-                <Image source={require('../assets/images/patient-1.png')} style={styles.patientimage} />
-              </View>
-              <View style={styles.detailwrapper}>
-                  <View style={styles.patientname}>
-                    <Text style={[styles.cardtext, styles.boldtext]}>Jenny Wilson</Text>
-                  </View>
-                  <View style={styles.patientcondition}>
-                    <Text style={[styles.cardtext, styles.lighttext]}>Condition: <Text style={[styles.lighttext, styles.cardtext, styles.boldcardtext, styles.boldtext]}>Medium</Text></Text>
-                  </View>
-              </View>
-            </View>
-            <View style={[styles.cardbtncontainer, styles.flexcss]}>
-              <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('PatientDetailes')} >
-                <Text style={[styles.buttonText, styles.viewbtntxt]}>View</Text>
-              </TouchableOpacity> 
-              <TouchableOpacity style={[styles.cardbtn,styles.removebtn]}>
-                <Text style={[styles.buttonText,styles.removebtntxt]}>Remove</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/*  Single Card */}
-          <View style={styles.card}>
-            <View style={[styles.carddetailwrapper, styles.flexcss]}>
-              <View style={styles.imagewrapper}>
-                <Image source={require('../assets/images/patient-2.png')} style={styles.patientimage} />
-              </View>
-              <View style={styles.detailwrapper}>
-                  <View style={styles.patientname}>
-                    <Text style={[styles.cardtext, styles.boldtext]}>Jenny Wilson</Text>
-                  </View>
-                  <View style={styles.patientcondition}>
-                    <Text style={[styles.cardtext, styles.lighttext]}>Condition: <Text style={[styles.lighttext, styles.cardtext, styles.boldcardtext, styles.boldtext]}>Medium</Text></Text>
-                  </View>
-              </View>
-            </View>
-            <View style={[styles.cardbtncontainer, styles.flexcss]}>
-              <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('PatientDetailes')} >
-                <Text style={[styles.buttonText, styles.viewbtntxt]}>View</Text>
-              </TouchableOpacity> 
-              <TouchableOpacity style={[styles.cardbtn,styles.removebtn]}>
-                <Text style={[styles.buttonText,styles.removebtntxt]}>Remove</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/*  Single Card */}
-          <View style={styles.card}>
-            <View style={[styles.carddetailwrapper, styles.flexcss]}>
-              <View style={styles.imagewrapper}>
-                <Image source={require('../assets/images/patient-2.png')} style={styles.patientimage} />
-              </View>
-              <View style={styles.detailwrapper}>
-                  <View style={styles.patientname}>
-                    <Text style={[styles.cardtext, styles.boldtext]}>Jenny Wilson</Text>
-                  </View>
-                  <View style={styles.patientcondition}>
-                    <Text style={[styles.cardtext, styles.lighttext]}>Condition: <Text style={[styles.lighttext, styles.cardtext, styles.boldcardtext, styles.boldtext]}>Medium</Text></Text>
-                  </View>
-              </View>
-            </View>
-            <View style={[styles.cardbtncontainer, styles.flexcss]}>
-              <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('PatientDetailes')} >
-                <Text style={[styles.buttonText, styles.viewbtntxt]}>View</Text>
-              </TouchableOpacity> 
-              <TouchableOpacity style={[styles.cardbtn,styles.removebtn]}>
-                <Text style={[styles.buttonText,styles.removebtntxt]}>Remove</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+      <View style={[styles.deletebtncontainer, styles.innerbox]} >
+        <TouchableOpacity style={styles.deletebutton} onPress={deleteAllPatientData}>
+          <Image source={require('../assets/images/delete-icon.png')} style={styles.deleteicon} />
+          <Text style={styles.dltbuttonText}>Delete All</Text>
+        </TouchableOpacity>
       </View>
-      </ScrollView>
     </View>
+    
+    <ScrollView>
+    <View style={styles.innercontainer}>
+      {/* List section */}
+      <View style={styles.cardwrapper} >
+      <FlatList
+        data={patientData}
+        renderItem={({item}) => < PatientDisplayCard patient={item}  />}
+        keyExtractor={item => item._id}
+      />
+
+
+        {/*  Single Card */}
+        
+
+        
+      </View>
+    </View>
+    </ScrollView>
+  </View>
   );
 };
 
@@ -234,7 +140,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   boldtext: {
-    fontWeight: 700
+    fontWeight: '700'
   },
   cardtext: {
     fontSize: 14.5
@@ -320,7 +226,7 @@ const styles = StyleSheet.create({
   dltbuttonText: {
     color: '#323232',
     fontSize: 12,
-    fontWeight: 700,
+    fontWeight: '700',
     paddingLeft:10,
   },
   // Card css

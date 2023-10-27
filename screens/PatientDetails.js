@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
 
-const PatientDetailes = ({ navigation }) => {
+const PatientDetails = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.innercontainer}>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         paddingRight: 8
     },
     boldtext: {
-        fontWeight: 700
+        fontWeight: '700'
     },
     patientimage: {
         width: '100%',
@@ -201,16 +201,16 @@ const styles = StyleSheet.create({
     viewbtntxt: {
         color: '#fff',
         fontSize: 14,
-        fontWeight: 600
+        fontWeight: '600'
     },
     removebtntxt: {
         color: '#6B81DC',
         fontSize: 14,
-        fontWeight: 600
+        fontWeight: '600'
     },
     deletebtn: {
         borderRadius: 8,
         backgroundColor: '#c30010'  
     }
 });
-export default PatientDetailes;
+export default PatientDetails;
