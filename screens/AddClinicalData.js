@@ -12,13 +12,13 @@ const AddClinicalData = ({ navigation }) => {
     const [heartbeat, setHeartbeat] = useState('');
     
     // Date picker value
-    const [chosenDate, setChosenDate] = useState(new Date());
+    const [DOB, setDOB] = useState(); //new Date()
     const [showDatePicker, setShowDatePicker] = useState(false);
 
     const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || chosenDate;
+        const currentDate = selectedDate || DOB;
         setShowDatePicker(false);
-        setChosenDate(currentDate);
+        setDOB(currentDate);
     };
 
     return (
@@ -91,8 +91,8 @@ const AddClinicalData = ({ navigation }) => {
 
                 <View style={styles.inputwrapper}>
                     <Text style={styles.inputlabel}>DOB</Text>
-                    <DateTimePicker
-                        value={chosenDate}
+                    {/*<DateTimePicker
+                        value={DOB}
                         mode="date"
                         is24Hour={true}
                         display="default"
@@ -100,6 +100,12 @@ const AddClinicalData = ({ navigation }) => {
                         style={styles.datePicker}
                         textColor="#FF0000" // Customize text color
                         testID="dateTimePicker"
+                    />*/}
+                    <TextInput
+                        style={styles.input}
+                        value={DOB}
+                        onChangeText={(text) => setDOB(text)}
+                        placeholder="Enter Date of Birth"
                     />
                 </View>
 
