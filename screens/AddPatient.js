@@ -23,7 +23,7 @@ const AddPatient = ({ navigation }) => {
     const conditions=['Normal','Critical'];
     // Date picker value
 
-    const [DOB, setDOB] = useState(); //(new Date());
+    const [DOB, setDOB] = useState(); //new Date()
     const [showDatePicker, setShowDatePicker] = useState(false);
 
     const onChange = (event, selectedDate) => {
@@ -122,11 +122,11 @@ const AddPatient = ({ navigation }) => {
                         style={styles.datePicker}
                         textColor="#FF0000" // Customize text color
                         testID="dateTimePicker"
-                    />*/}
+                     />*/}
                     <TextInput
                         style={styles.input}
-                        value={age}
-                        onChangeText={(text) => setDOB(DOB)}
+                        value={DOB}
+                        onChangeText={(text) => setDOB(text)}
                         placeholder="Enter your Date of Birth"
                     />
                 </View>
@@ -169,7 +169,7 @@ const AddPatient = ({ navigation }) => {
                     selectedOption={gender}
                     />
                 </View>
-                {/*  addNewPatient()*/}
+                    {/*  addNewPatient()*/}
                 <View style={styles.submitwrapper}>
                     <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('ViewClinicalData')} > 
                         <Text style={[styles.buttonText, styles.viewbtntxt]}>Add Patient</Text>

@@ -4,19 +4,21 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView} from 'reac
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const ViewClinicalData = ({ navigation }) => {
-  const [chosenDate, setChosenDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [chosenDateFirst, setChosenDateFirst] = useState(); //new Date()
+  const [chosenDateSecond, setChosenDateSecond] = useState(); //new Date()
+  const [showDatePickerFirst, setShowDatePickerFirst] = useState(false);
+  const [showDatePickerSecond, setShowDatePickerSecond] = useState(false);
 
   const onChangefirst = (event, selectedDate) => {
     const currentDate = selectedDate || chosenDate;
-    setShowDatePicker(false);
-    setChosenDate(currentDate);
+    setShowDatePickerFirst(false);
+    setChosenDateFirst(currentDate);
   };
 
   const onChangesecond = (event, selectedDate) => {
     const currentDate = selectedDate || chosenDate;
-    setShowDatePicker(false);
-    setChosenDate(currentDate);
+    setShowDatePickerSecond(false);
+    setChosenDateSecond(currentDate);
   };
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -38,8 +40,8 @@ const ViewClinicalData = ({ navigation }) => {
 
             {/* Date sorting */}
             <View style={[styles.datepickercontainer, styles.boxshadowcss]}>
-                <DateTimePicker
-                    value={chosenDate}
+                {/*<DateTimePicker
+                    value={chosenDateFirst}
                     mode="date"
                     is24Hour={true}
                     display="default"
@@ -47,10 +49,16 @@ const ViewClinicalData = ({ navigation }) => {
                     style={styles.datePicker}
                     textColor="#FF0000" // Customize text color
                     testID="dateTimePicker"
-                />
+                />*/}
+                <TextInput
+                        style={styles.input}
+                        value={chosenDateFirst}
+                        onChangeText={(text) => setChosenDateFirst(text)}
+                        placeholder="First Date"
+                    />
                <Text style={[styles.boldtext]}>To</Text> 
-               <DateTimePicker
-                    value={chosenDate}
+               {/*<DateTimePicker
+                    value={chosenDateSecond}
                     mode="date"
                     is24Hour={true}
                     display="default"
@@ -58,7 +66,13 @@ const ViewClinicalData = ({ navigation }) => {
                     style={styles.datePicker}
                     textColor="#FF0000" // Customize text color
                     testID="dateTimePicker"
-                />
+            />*/}
+            <TextInput
+                        style={styles.input}
+                        value={chosenDateSecond}
+                        onChangeText={(text) => setChosenDateSecond(text)}
+                        placeholder="Second Date"
+                    />
             </View>
 
             {/* List section */}
