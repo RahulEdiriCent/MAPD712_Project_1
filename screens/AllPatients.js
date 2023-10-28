@@ -10,7 +10,7 @@ const AllPatientsScreen = ({ navigation }) => {
   const [patientData, setPatientData] = useState();
   
   //this will be the link to server for fetch commands, https://localhost:4000/patients
-  const FETCHAPILINK = 'https://6b0f-99-211-193-59.ngrok.io/patients'; //currently this link is a ngrok temporary public rebound IP for locahost
+  const FETCHAPILINK = 'https://5957-99-211-193-59.ngrok.io/patients'; //currently this link is a ngrok temporary public rebound IP for locahost
   //It was used for testing purposes until server is properly hosted online, code works as expected, once web server is fully hosted online,
   //app will be able to act as front-end fully.
 
@@ -27,9 +27,9 @@ const AllPatientsScreen = ({ navigation }) => {
     //used thgis endpoint for easy searching and differentiate from get patients/ endpoint 
     await fetch((FETCHAPILINK + '/search/condition/' + filterCondition ), {
       method: 'GET' //use get method
-    }).then((response) => response.json()).then((json) => {
+    }).then((response) => response.json()).then((returnedJSON) => {
      //console.log(json);
-      const temp_data_hold = json.map(item => item);
+      const temp_data_hold = returnedJSON.map(item => item);
       setPatientData(temp_data_hold);
      })
     .catch((getWithConditionError) => {
@@ -55,9 +55,9 @@ const AllPatientsScreen = ({ navigation }) => {
     //replace with proper api ip
     await fetch(FETCHAPILINK , {
       method: 'GET' //use get method
-    }).then((response) => response.json()).then((json) => {
+    }).then((response) => response.json()).then((returnedJSON) => {
      //console.log(json);
-     const temp_data_hold = json.map(item => item);
+     const temp_data_hold = returnedJSON.map(item => item);
       setPatientData(temp_data_hold);
      })
     .catch((getAllError) => {
@@ -70,9 +70,9 @@ const AllPatientsScreen = ({ navigation }) => {
     
     await fetch(FETCHAPILINK, {
       method: 'DELETE'
-    }).then((response) => response.json()).then((json) => {
+    }).then((response) => response.json()).then((returnedJSON) => {
       alert("!All Patient Data Deleted!")//alert to indicate files have been deleted
-      console.log(json);
+      console.log(returnedJSON);
       setPatientData(); //update state to refresh page to show that data has been deleted
      }).catch((DeleteAllError) => {
       console.log(DeleteAllError);     
