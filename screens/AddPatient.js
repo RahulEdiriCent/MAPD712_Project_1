@@ -163,9 +163,9 @@ const AddPatient = ({ navigation }) => {
                     selectedOption={gender}
                     />
                 </View>
-
+                {/*  addNewPatient()*/}
                 <View style={styles.submitwrapper}>
-                    <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('ViewClinicalData')} > {/*  addNewPatient()*/}
+                    <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('ViewClinicalData')} > 
                         <Text style={[styles.buttonText, styles.viewbtntxt]}>Add Patient</Text>
                     </TouchableOpacity> 
                 </View>
