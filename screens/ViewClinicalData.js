@@ -1,6 +1,6 @@
 // PatientDetailed.js
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const ViewClinicalData = ({ navigation }) => {
