@@ -23,13 +23,13 @@ const AddPatient = ({ navigation }) => {
     const conditions=['Normal','Critical'];
     // Date picker value
 
-    const [DOB, setChosenDate] = useState(new Date());
+    const [DOB, setDOB] = useState(); //(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || DOB;
         setShowDatePicker(false);
-        setChosenDate(currentDate);
+        setDOB(currentDate);
     };
 
     /*
@@ -113,7 +113,7 @@ const AddPatient = ({ navigation }) => {
             
                 <View style={styles.inputwrapper}>
                     <Text style={styles.inputlabel}>DOB</Text>
-                    <DateTimePicker
+                    {/*<DateTimePicker
                         value={DOB}
                         mode="date"
                         is24Hour={true}
@@ -122,6 +122,12 @@ const AddPatient = ({ navigation }) => {
                         style={styles.datePicker}
                         textColor="#FF0000" // Customize text color
                         testID="dateTimePicker"
+                    />*/}
+                    <TextInput
+                        style={styles.input}
+                        value={age}
+                        onChangeText={(text) => setDOB(DOB)}
+                        placeholder="Enter your Date of Birth"
                     />
                 </View>
                
