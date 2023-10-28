@@ -12,6 +12,8 @@ import AddClinicalData from './screens/AddClinicalData';
 
 const Stack = createStackNavigator();
 
+
+//By Kajal Patel and Rahul Edirisinghe (Group 14)
 const App = () => {
   return (
     <NavigationContainer>
