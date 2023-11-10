@@ -38,7 +38,7 @@ const ViewClinicalData = ({ navigation }) => {
                 <Text style={styles.patientid}>ID: <Text>15018</Text></Text>
             </View>
 
-            {/* Date sorting */}
+            {/* Date sorting 
             <View style={[styles.datepickercontainer, styles.boxshadowcss]}>
                 {/*<DateTimePicker
                     value={chosenDateFirst}
@@ -49,7 +49,7 @@ const ViewClinicalData = ({ navigation }) => {
                     style={styles.datePicker}
                     textColor="#FF0000" // Customize text color
                     testID="dateTimePicker"
-                />*/}
+                />
                 <TextInput
                         style={styles.input}
                         value={chosenDateFirst}
@@ -66,7 +66,7 @@ const ViewClinicalData = ({ navigation }) => {
                     style={styles.datePicker}
                     textColor="#FF0000" // Customize text color
                     testID="dateTimePicker"
-            />*/}
+            />
             <TextInput
                         style={styles.input}
                         value={chosenDateSecond}
@@ -74,7 +74,7 @@ const ViewClinicalData = ({ navigation }) => {
                         placeholder="Second Date"
                     />
             </View>
-
+            */}
             {/* List section */}
             <View style={styles.cardwrapper} >
                 {/*  Single Card */}

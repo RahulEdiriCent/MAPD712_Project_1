@@ -10,7 +10,7 @@ const AllPatientsScreen = ({ navigation }) => {
   const [patientData, setPatientData] = useState();
   
   //this will be the link to server for fetch commands, https://localhost:4000/patients
-  const FETCHAPILINK = 'https://5957-99-211-193-59.ngrok.io/patients'; //currently this link is a ngrok temporary public rebound IP for locahost
+  const FETCHAPILINK = 'https://5153-99-211-193-59.ngrok.io/patients'; //currently this link is a ngrok temporary public rebound IP for locahost
   //It was used for testing purposes until server is properly hosted online, code works as expected, once web server is fully hosted online,
   //app will be able to act as front-end fully.
 
@@ -79,6 +79,20 @@ const AllPatientsScreen = ({ navigation }) => {
     })
   }
 
+  //delete one patient record using id functionality integration with 713 API--
+  const deleteOnePatientRecord = async (pid)=>{
+    
+    await fetch(FETCHAPILINK + "/" + pid, {
+      method: 'DELETE'
+    }).then((response) => response.json()).then((returnedJSON) => {
+      alert("!Patient with Id: "+ pid +", has beeen Deleted!")//alert to indicate files have been deleted
+      console.log(returnedJSON);
+      setPatientData(); //update state to refresh page to show that data has been deleted
+     }).catch((DeleteOneError) => {
+      console.log(DeleteOneError);     
+    })
+  }
+
   //used to immediately display all patients upon screen being loaded
   useEffect(()=>{
     getAllPatientData();
@@ -107,7 +121,7 @@ const AllPatientsScreen = ({ navigation }) => {
             <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('PatientDetails')} id="delete">
               <Text style={[styles.buttonText, styles.viewbtntxt]}>View</Text>
             </TouchableOpacity> 
-            <TouchableOpacity style={[styles.cardbtn,styles.removebtn]}>
+            <TouchableOpacity style={[styles.cardbtn,styles.removebtn]} onPress={deleteOnePatientRecord(patient.patientId)}>
               <Text style={[styles.buttonText,styles.removebtntxt]}>Remove</Text>
             </TouchableOpacity>
           </View>

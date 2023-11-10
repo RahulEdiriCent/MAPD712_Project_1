@@ -32,7 +32,7 @@ const AddPatient = ({ navigation }) => {
         setDOB(currentDate);
     };
 
-    /*
+    
     const addNewPatient = async()=>{//not functional with API 
         await fetch(FETCHAPILINK, {
             method: 'POST',
@@ -49,8 +49,9 @@ const AddPatient = ({ navigation }) => {
                 address: address,
                 date_of_birth: DOB,
                 department: department,
-                condition:  condition, //temp placement here as to allow for condition handling
-                doctor:  doctor
+                condition:  condition, //temp placement here as to allow for condition handling or "Normal"
+                doctor:  doctor,
+                tests: []
             }),
         }).then((response) => response.json()).then((json) => {
             //console.log(json);
@@ -60,7 +61,7 @@ const AddPatient = ({ navigation }) => {
         .catch((error) => {
           console.log(error);     
         });
-    }*/
+    }
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -169,9 +170,9 @@ const AddPatient = ({ navigation }) => {
                     selectedOption={gender}
                     />
                 </View>
-                    {/*  addNewPatient()*/}
+                    {/* () => navigation.navigate('ViewClinicalData') */}
                 <View style={styles.submitwrapper}>
-                    <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('ViewClinicalData')} > 
+                    <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={addNewPatient()} > 
                         <Text style={[styles.buttonText, styles.viewbtntxt]}>Add Patient</Text>
                     </TouchableOpacity> 
                 </View>
