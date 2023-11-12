@@ -5,7 +5,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 const ViewClinicalData = ({ navigation, route  }) => {
     const {patientId} = route.params;
-    const FETCHAPILINK = 'https://e23f-99-211-193-59.ngrok.io/patients/';
+    const FETCHAPILINK = 'https://9f1f-142-112-133-137.ngrok.io/patients/';
     const [clinicalData, setClinicalData] = useState();
     //
   const [chosenDateFirst, setChosenDateFirst] = useState(); //new Date()
@@ -79,58 +79,64 @@ const ViewClinicalData = ({ navigation, route  }) => {
     <View style={styles.card}>
         {/*  Single Card */}
         <View style={styles.boxshadowcss}>
-                    {/* Test Id */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Test Id: {test.testId}</Text>
-                    </View>
+            {/* Test Id */}
+            <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                <Text style={styles.title}>Test Id: </Text>
+                <Text style={styles.title}>{test.testId}</Text>
+            </View>
 
 
-                    {/* Patient Id */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Patient Id: {test.patientId}</Text>
-                    </View>
+            {/* Patient Id */}
+            {/* <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                <Text style={styles.title}>Patient Id: {test.patientId}</Text>
+            </View> */}
 
-                   {/* Status */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Test Result Status: {test.status}</Text>
-                    </View>
+            {/* Status */}
+            <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                <Text style={styles.title}>Test Result Status: </Text>
+                <Text style={styles.title}>{test.status}</Text>
+            </View>
 
-                    {/* Test Date */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Test Date: {test.testDate}</Text>
-                    </View>
+            {/* Test Date */}
+            <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                <Text style={styles.title}>Test Date: </Text>
+                <Text style={styles.title}>{test.testDate}</Text>
+            </View>
 
-                    {/* Nurse */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Nurse: {test.nurse_name}</Text>
-                    </View>
+            {/* Nurse */}
+            <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                <Text style={styles.title}>Nurse: </Text>
+                <Text style={styles.title}>{test.nurse_name}</Text>
+            </View>
 
-                    {/* Type */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Type: {test.type}</Text>
-                    </View>
+            {/* Type */}
+            <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                <Text style={styles.title}>Type: </Text>
+                <Text style={styles.title}>{test.type}</Text>
+            </View>
 
-                    {/* Category */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Category: {test.category}</Text>
-                    </View>
+            {/* Category */}
+            <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                <Text style={styles.title}>Category: </Text>
+                <Text style={styles.title}>{test.category}</Text>
+            </View>
 
-                    {/* Readings */}
-                    <Text style={styles.title}>Readings:</Text>
-                    <FlatList
-                        data={test.readings.map(([readingValue_1, readingValue_2]) => `${readingValue_1} : ${readingValue_2}`)}
-                        renderItem={({item}) => <TestReadingsDisplay readings={item}  />}
-                        keyExtractor={(item, index) => index.toString()}
-                    /> 
+            {/* Readings */}
+            <Text style={styles.title}>Readings:</Text>
+            <FlatList
+                data={test.readings.map(([readingValue_1, readingValue_2]) => `${readingValue_1} : ${readingValue_2}`)}
+                renderItem={({item}) => <TestReadingsDisplay readings={item}  />}
+                keyExtractor={(item, index) => index.toString()}
+            /> 
 
-                    {/* Delete Test */}
-                    <View style={[styles.deletedatewrapper, styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.testdates}>{test.testDate}</Text>
-                        <TouchableOpacity onPress={()=> deleteOneClinicalTestRecord(test.testId)}>
-                            <Image source={require('../assets/images/purple-delete-icon.png')} style={styles.ppldeleteicon} />
-                        </TouchableOpacity>
-                    </View> 
-                </View>
+            {/* Delete Test */}
+            <View style={[styles.deletedatewrapper, styles.singledetailwrapper, styles.flexcss]}>
+                <Text style={styles.testdates}>{test.testDate}</Text>
+                <TouchableOpacity onPress={()=> deleteOneClinicalTestRecord(test.testId)}>
+                    <Image source={require('../assets/images/purple-delete-icon.png')} style={styles.ppldeleteicon} />
+                </TouchableOpacity>
+            </View> 
+        </View>
     </View>
    );
 
@@ -189,6 +195,7 @@ const ViewClinicalData = ({ navigation, route  }) => {
             */}
             {/* List section */}
             <View style={styles.cardwrapper} > 
+
                 <FlatList
                 data={clinicalData}
                 renderItem={({item}) => < ClinicalTestDisplayCard test={item}  />}
@@ -202,10 +209,11 @@ const ViewClinicalData = ({ navigation, route  }) => {
 const styles = StyleSheet.create({
     container: {
         textAlign: 'center',
-        minHeight: 500
+        // minHeight: 500
     },
     innercontainer: {
-        padding: 15
+        padding: 15,
+        marginBottom: 150
     },
     boxshadowcss: {
         backgroundColor: '#FDFCFA',
@@ -279,7 +287,7 @@ const styles = StyleSheet.create({
     },
     patientimage: {
         width: '100%',
-        height: 220,
+        // height: 220,
         borderRadius: 10,
     },
     // Main css section

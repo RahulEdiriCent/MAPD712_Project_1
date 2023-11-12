@@ -4,7 +4,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView} from 'reac
 
 const PatientDetails = ({ navigation , route }) => {
     const {patientid} = route.params;
-    const FETCHAPILINK = 'https://e23f-99-211-193-59.ngrok.io/patients/';
+    const FETCHAPILINK = 'https://9f1f-142-112-133-137.ngrok.io/patients/';
     const [patientData, setPatientData] = useState(); 
 
     //Fetch all patients functionality integration with 713 API--
