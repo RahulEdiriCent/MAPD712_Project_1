@@ -1,20 +1,61 @@
 // PatientDetailed.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
 
-const PatientDetails = ({ navigation }) => {
-    const FETCHAPILINK = 'https://5153-99-211-193-59.ngrok.io/patients'
+const PatientDetails = ({ navigation , route }) => {
+    const {patientid} = route.params;
+    const FETCHAPILINK = 'https://2602-142-112-133-137.ngrok.io/patients/';
+    const [patientData, setPatientData] = useState(); 
+
+    //Fetch all patients functionality integration with 713 API--
+    const getPatientData = async()=>{
+        //replace with proper api ip
+        await fetch(FETCHAPILINK+patientid , {
+        method: 'GET' //use get method
+        }).then((response) => response.json()).then((returnedJSON) => {
+        //console.log(json);
+        const temp_data_hold = returnedJSON;
+        setPatientData(temp_data_hold);
+        })
+        .catch((getAllError) => {
+        console.log(getAllError);     
+        })
+    }
+
+    //delete one patient record using id functionality integration with 713 API--
+    const deleteOnePatientRecord = async()=>{
+        
+        await fetch(FETCHAPILINK+patientid, {
+        method: 'DELETE'
+        }).then((response) => response.json()).then((returnedJSON) => {
+        alert("!Patient with Id: "+ patientid +", has beeen Deleted!")//alert to indicate files have been deleted
+        console.log(returnedJSON);
+        // setPatientData(); //update state to refresh page to show that data has been deleted
+        backToAllPatientsPage();
+        }).catch((DeleteOneError) => {
+        console.log(DeleteOneError);     
+        })
+    }
     
+    const backToAllPatientsPage = () => {
+        navigation.navigate('HomeScreen')
+    }
+
+    useEffect(()=>{
+        getPatientData();
+    }, []);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
+        {patientData ? (
         <View style={styles.innercontainer}>
             {/* Banner Section */}
             <View style={[styles.bannercontainer, styles.boxshadowcss]}>
                 <Image source={require('../assets/images/patient_detailed_image.png')} style={styles.patientimage} />
                 <View style={styles.flexcss}>
                     <View>
-                        <Text style={[styles.patientname, styles.boldtext]}>Jenny Wilson</Text>
-                        <Text style={styles.patientid}>ID: <Text>15018</Text></Text>
+                        <Text style={[styles.patientname, styles.boldtext]}>{patientData.firstName + " " + patientData.lastName}</Text>
+                        <Text style={styles.patientid}>ID: <Text>{patientData.patientId}</Text></Text>
                     </View>
                     <View>
                         <TouchableOpacity style={[styles.editbtn,styles.viewbtn]} onPress={() => navigation.navigate('EditPatient')} >
@@ -29,61 +70,67 @@ const PatientDetails = ({ navigation }) => {
                 {/* Fname */}
                 <View style={[styles.singledetailwrapper, styles.flexcss]}>
                     <Text style={styles.title}>First Name: </Text>
-                    <Text style={styles.value}>Jenny</Text>
+                    <Text style={styles.value}>{patientData.firstName}</Text>
                 </View>
 
                 {/* lname */}
                 <View style={[styles.singledetailwrapper, styles.flexcss]}>
                     <Text style={styles.title}>Last Name: </Text>
-                    <Text style={styles.value}>Wilson</Text>
+                    <Text style={styles.value}>{patientData.lastName}</Text>
                 </View>
 
                 {/* Address */}
                 <View style={[styles.singledetailwrapper, styles.flexcss]}>
                     <Text style={styles.title}>Address: </Text>
-                    <Text style={[styles.value, styles.addresswidth]}>1087 Coldream Dr, Oshawa, ON, L1K H7U</Text>
+                    <Text style={[styles.value, styles.addresswidth]}>{patientData.address}</Text>
                 </View>
 
                 {/* Gender */}
                 <View style={[styles.singledetailwrapper, styles.flexcss]}>
                     <Text style={styles.title}>Gender: </Text>
-                    <Text style={styles.value}>Female</Text>
+                    <Text style={styles.value}>{patientData.gender}</Text>
                 </View>
 
                 {/* Number */}
                 <View style={[styles.singledetailwrapper, styles.flexcss]}>
                     <Text style={styles.title}>Number: </Text>
-                    <Text style={styles.value}>1342-345-456</Text>
+                    <Text style={styles.value}>{patientData.phoneNumber}</Text>
                 </View>
 
-                {/* Email */}
+                {/* Email
                 <View style={[styles.singledetailwrapper, styles.flexcss]}>
                     <Text style={styles.title}>Email:</Text>
-                    <Text style={styles.value}>demo@gmail.com</Text>
-                </View>
+                    <Text style={styles.value}>{patientData.gender}</Text>
+                </View> */}
 
                 {/* DOB */}
                 <View style={[styles.singledetailwrapper, styles.flexcss]}>
                     <Text style={styles.title}>DOB:</Text>
-                    <Text style={styles.value}>25-03-2000</Text>
+                    <Text style={styles.value}>{patientData.date_of_birth}</Text>
                 </View>
 
                 {/* Age */}
                 <View style={[styles.singledetailwrapper, styles.flexcss]}>
                     <Text style={styles.title}>Age:</Text>
-                    <Text style={styles.value}>25</Text>
+                    <Text style={styles.value}>{patientData.age}</Text>
                 </View>
 
                 {/* Department */}
                 <View style={[styles.singledetailwrapper, styles.flexcss]}>
                     <Text style={styles.title}>Department:</Text>
-                    <Text style={styles.value}>Dental</Text>
+                    <Text style={styles.value}>{patientData.department}</Text>
+                </View>
+
+                {/* Condition */}
+                <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                    <Text style={styles.title}>Condition:</Text>
+                    <Text style={styles.value}>{patientData.condition}</Text>
                 </View>
 
                 {/* Doctor */}
                 <View style={[styles.singledetailwrapper, styles.flexcss]}>
                     <Text style={styles.title}>Doctor:</Text>
-                    <Text style={styles.value}>Dr. John Doe</Text>
+                    <Text style={styles.value}>{patientData.doctor}</Text>
                 </View>
             </View>
 
@@ -99,11 +146,18 @@ const PatientDetails = ({ navigation }) => {
 
             {/* Delete Button Section */}
             <View style={[styles.testsbuttoncontainer, styles.boxshadowcss]}>
-                <TouchableOpacity style={[styles.viewbtn,styles.deletebtn]} >
+                <TouchableOpacity style={[styles.viewbtn,styles.deletebtn]} onPress={() => deleteOnePatientRecord()}>
                     <Text style={[styles.buttonText, styles.viewbtntxt]}>Delete Patient</Text>
                 </TouchableOpacity> 
             </View>
         </View>
+        ) : (
+            <View>
+                <Text>
+                    Not Found
+                </Text>
+            </View>
+        )}
     </ScrollView>
     );
   };
