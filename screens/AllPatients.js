@@ -10,7 +10,7 @@ const AllPatientsScreen = ({ navigation }) => {
   const [patientData, setPatientData] = useState();
   
   //this will be the link to server for fetch commands, https://localhost:4000/patients
-  const FETCHAPILINK = 'https://2602-142-112-133-137.ngrok.io/patients'; //currently this link is a ngrok temporary public rebound IP for locahost
+  const FETCHAPILINK = 'https://e23f-99-211-193-59.ngrok.io/patients'; //currently this link is a ngrok temporary public rebound IP for locahost
   //It was used for testing purposes until server is properly hosted online, code works as expected, once web server is fully hosted online,
   //app will be able to act as front-end fully.
 

@@ -7,7 +7,7 @@ import RadioButtonGroup from '../components/RadioButtonGroup';
 
 
 const AddPatient = ({ navigation }) => {
-    const FETCHAPILINK = 'https://2602-142-112-133-137.ngrok.io/patients'; 
+    const FETCHAPILINK = 'https://e23f-99-211-193-59.ngrok.io/patients'; 
 
     const [patientId, setPateintId] = useState(0);
     const [firstName, setFirstname] = useState('');

@@ -4,7 +4,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView} from 'reac
 
 const PatientDetails = ({ navigation , route }) => {
     const {patientid} = route.params;
-    const FETCHAPILINK = 'https://2602-142-112-133-137.ngrok.io/patients/';
+    const FETCHAPILINK = 'https://e23f-99-211-193-59.ngrok.io/patients/';
     const [patientData, setPatientData] = useState(); 
 
     //Fetch all patients functionality integration with 713 API--
@@ -31,14 +31,18 @@ const PatientDetails = ({ navigation , route }) => {
         alert("!Patient with Id: "+ patientid +", has beeen Deleted!")//alert to indicate files have been deleted
         console.log(returnedJSON);
         // setPatientData(); //update state to refresh page to show that data has been deleted
-        backToAllPatientsPage();
+        backToHomePage();
         }).catch((DeleteOneError) => {
         console.log(DeleteOneError);     
         })
     }
     
-    const backToAllPatientsPage = () => {
+    const backToHomePage = () => {
         navigation.navigate('HomeScreen')
+    }
+
+    const toClinicalDataPage = (pid) => {
+        navigation.navigate('ViewClinicalData', {patientId: pid})
     }
 
     useEffect(()=>{
@@ -136,7 +140,7 @@ const PatientDetails = ({ navigation , route }) => {
 
             {/* Tests Button Section */}
             <View style={[styles.testsbuttoncontainer, styles.flexcss, styles.boxshadowcss]}>
-                <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('ViewClinicalData')} >
+                <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => toClinicalDataPage(patientData.patientId)} >
                     <Text style={[styles.buttonText, styles.viewbtntxt]}>View Clinical Data</Text>
                 </TouchableOpacity> 
                 <TouchableOpacity style={[styles.cardbtn,styles.removebtn]} onPress={() => navigation.navigate('AddClinicalData')} >

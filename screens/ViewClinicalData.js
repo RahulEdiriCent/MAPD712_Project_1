@@ -1,14 +1,19 @@
 // PatientDetailed.js
-import React, { useState } from 'react';
-import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const ViewClinicalData = ({ navigation }) => {
+const ViewClinicalData = ({ navigation, route  }) => {
+    const {patientId} = route.params;
+    const FETCHAPILINK = 'https://e23f-99-211-193-59.ngrok.io/patients/';
+    const [clinicalData, setClinicalData] = useState();
+    //
   const [chosenDateFirst, setChosenDateFirst] = useState(); //new Date()
   const [chosenDateSecond, setChosenDateSecond] = useState(); //new Date()
   const [showDatePickerFirst, setShowDatePickerFirst] = useState(false);
   const [showDatePickerSecond, setShowDatePickerSecond] = useState(false);
 
+/*
   const onChangefirst = (event, selectedDate) => {
     const currentDate = selectedDate || chosenDate;
     setShowDatePickerFirst(false);
@@ -20,8 +25,95 @@ const ViewClinicalData = ({ navigation }) => {
     setShowDatePickerSecond(false);
     setChosenDateSecond(currentDate);
   };
+*/
+
+ //Fetch all patients functionality integration with 713 API--
+ const getAllClinicalData = async()=>{
+    //replace with proper api ip
+    await fetch(FETCHAPILINK + patientId + "/tests", {
+      method: 'GET' //use get method
+    }).then((response) => response.json()).then((returnedJSON) => {
+     console.log(returnedJSON);
+     const temp_data_hold = returnedJSON.map(item => item);
+      setClinicalData(temp_data_hold);
+     })
+    .catch((getAllClinicalDataError) => {
+      console.log(getAllClinicalDataError);     
+    })
+  }
+
+  useEffect(()=>{
+    getAllClinicalData();
+  }, []);
+
+
+   {/*Use to display each found patient in the list*/}
+   const ClinicalTestDisplayCard = ({test}) =>(
+    <View style={styles.card}>
+        {/*  Single Card */}
+        <View style={styles.boxshadowcss}>
+                    {/* Test Id */}
+                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                        <Text style={styles.title}>Test Id: {test.testId}</Text>
+                    </View>
+
+
+                    {/* Patient Id */}
+                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                        <Text style={styles.title}>Patient Id: {test.patientId}</Text>
+                    </View>
+
+                   {/* Status */}
+                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                        <Text style={styles.title}>Test Result Status: {test.status}</Text>
+                    </View>
+
+                    {/* Test Date */}
+                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                        <Text style={styles.title}>Test Date: {test.testDate}</Text>
+                    </View>
+
+                    {/* Nurse */}
+                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                        <Text style={styles.title}>Nurse: {test.nurse_name}</Text>
+                    </View>
+
+                    {/* Type */}
+                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                        <Text style={styles.title}>Type: {test.type}</Text>
+                    </View>
+
+                    {/* Category */}
+                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
+                        <Text style={styles.title}>Category: {test.category}</Text>
+                    </View>
+
+                    {/* Readings */}
+                    <Text style={styles.title}>Readings:</Text>
+                    <FlatList
+                        data={test.readings.map(([readingValue_1, readingValue_2]) => `${readingValue_1} : ${readingValue_2}`)}
+                        renderItem={({item}) => <TestReadingsDisplay readings={item}  />}
+                        keyExtractor={(item, index) => index.toString()}
+                    /> 
+
+                    {/* Delete Test */}
+                    <View style={[styles.deletedatewrapper, styles.singledetailwrapper, styles.flexcss]}>
+                        <Text style={styles.testdates}>02/23/223</Text>
+                        <TouchableOpacity>
+                            <Image source={require('../assets/images/purple-delete-icon.png')} style={styles.ppldeleteicon} />
+                        </TouchableOpacity>
+                    </View> 
+                </View>
+    </View>
+   );
+
+    const TestReadingsDisplay = ({readings}) =>(
+        <View style={[styles.singledetailwrapper, styles.flexcss]}>
+            <Text style={styles.title}>{readings}</Text>
+        </View>  
+    )
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.innercontainer}>
             {/* Deletebutton */}
             <View style={styles.deletebtncontainer}>
@@ -29,13 +121,6 @@ const ViewClinicalData = ({ navigation }) => {
                     <Image source={require('../assets/images/delete-icon.png')} style={styles.deleteicon} />
                     <Text style={styles.dltbuttonText}>Delete All Tests </Text>
                 </TouchableOpacity>
-            </View>
-
-            {/* Banner Section */}
-            <View style={[styles.bannercontainer, styles.boxshadowcss]}>
-                <Image source={require('../assets/images/patient_detailed_image.png')} style={styles.patientimage} />
-                <Text style={[styles.patientname, styles.boldtext]}>Jenny Wilson</Text>
-                <Text style={styles.patientid}>ID: <Text>15018</Text></Text>
             </View>
 
             {/* Date sorting 
@@ -76,115 +161,14 @@ const ViewClinicalData = ({ navigation }) => {
             </View>
             */}
             {/* List section */}
-            <View style={styles.cardwrapper} >
-                {/*  Single Card */}
-                <View style={styles.boxshadowcss}>
-                    {/* Blood Pressure */}
-                    <Text style={styles.title}>Blood Pressure: </Text>
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Systolic | Diastolic</Text>
-                        <Text style={styles.value}>120 | 80</Text>   
-                    </View>
-
-                    {/* Respirator */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Respirator</Text>
-                        <Text style={styles.value}>--</Text>   
-                    </View>
-
-                    {/* Blood Oxygen */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Blood Oxygen</Text>
-                        <Text style={styles.value}>97%</Text>   
-                    </View>
-
-                    {/* Heart beat */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Heart Beat</Text>
-                        <Text style={styles.value}>65-72</Text>   
-                    </View>
-                    {/* Date */}
-                    <View style={[styles.deletedatewrapper,styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.testdates}>02/23/223</Text>
-                        <TouchableOpacity>
-                            <Image source={require('../assets/images/purple-delete-icon.png')} style={styles.ppldeleteicon} />
-                        </TouchableOpacity>
-                    </View> 
-                </View>
-
-                {/*  Single Card */}
-                <View style={styles.boxshadowcss}>
-                    {/* Blood Pressure */}
-                    <Text style={styles.title}>Blood Pressure: </Text>
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Systolic | Diastolic</Text>
-                        <Text style={styles.value}>120 | 80</Text>   
-                    </View>
-
-                    {/* Respirator */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Respirator</Text>
-                        <Text style={styles.value}>--</Text>   
-                    </View>
-
-                    {/* Blood Oxygen */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Blood Oxygen</Text>
-                        <Text style={styles.value}>97%</Text>   
-                    </View>
-
-                    {/* Heart beat */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Heart Beat</Text>
-                        <Text style={styles.value}>65-72</Text>   
-                    </View>
-                    {/* Date */}
-                    <View style={[styles.deletedatewrapper, styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.testdates}>02/23/223</Text>
-                        <TouchableOpacity>
-                            <Image source={require('../assets/images/purple-delete-icon.png')} style={styles.ppldeleteicon} />
-                        </TouchableOpacity>
-                    </View> 
-                </View>
-
-                {/*  Single Card */}
-                <View style={styles.boxshadowcss}>
-                    {/* Blood Pressure */}
-                    <Text style={styles.title}>Blood Pressure: </Text>
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Systolic | Diastolic</Text>
-                        <Text style={styles.value}>120 | 80</Text>   
-                    </View>
-
-                    {/* Respirator */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Respirator</Text>
-                        <Text style={styles.value}>--</Text>   
-                    </View>
-
-                    {/* Blood Oxygen */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Blood Oxygen</Text>
-                        <Text style={styles.value}>97%</Text>   
-                    </View>
-
-                    {/* Heart beat */}
-                    <View style={[styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.title}>Heart Beat</Text>
-                        <Text style={styles.value}>65-72</Text>   
-                    </View>
-
-                    {/* Date */}
-                    <View style={[styles.deletedatewrapper, styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.testdates}>02/23/223</Text>
-                        <TouchableOpacity>
-                            <Image source={require('../assets/images/purple-delete-icon.png')} style={styles.ppldeleteicon} />
-                        </TouchableOpacity>
-                    </View> 
-                </View>
+            <View style={styles.cardwrapper} > 
+                <FlatList
+                data={clinicalData}
+                renderItem={({item}) => < ClinicalTestDisplayCard test={item}  />}
+                keyExtractor={item => item._id}
+                />  
             </View>
         </View>
-    </ScrollView>
     );
   };
 
