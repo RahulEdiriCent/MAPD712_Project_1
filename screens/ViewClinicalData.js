@@ -42,6 +42,33 @@ const ViewClinicalData = ({ navigation, route  }) => {
     })
   }
 
+  const deleteAllPatientClinicalTestData = async ()=>{
+    await fetch(FETCHAPILINK + patientId + "/tests", {
+      method: 'DELETE'
+    }).then((response) => response.json()).then((returnedJSON) => {
+      alert("!All Patient Test Data Has Been Deleted!")//alert to indicate files have been deleted
+      console.log(returnedJSON);
+      setClinicalData(); //update state to refresh page to show that data has been deleted
+     }).catch((DeleteAllError) => {
+      console.log(DeleteAllError);     
+    })
+  }
+
+  //delete one clinical test record for pateint using id functionality integration with 713 API--
+  const deleteOneClinicalTestRecord = async (tid)=>{
+    await fetch(FETCHAPILINK + patientId + "/tests/" + tid, {
+      method: 'DELETE'
+    }).then((response) => response.json()).then((returnedJSON) => {
+      alert("!Test with Id: "+ tid +", has beeen Deleted!")//alert to indicate files have been deleted
+      console.log(returnedJSON);
+      //navigation.goBack()
+      getAllClinicalData();//update state to refresh page to show that data has been deleted
+     }).catch((DeleteOneError) => {
+      console.log(DeleteOneError);     
+    })
+  }
+
+
   useEffect(()=>{
     getAllClinicalData();
   }, []);
@@ -98,8 +125,8 @@ const ViewClinicalData = ({ navigation, route  }) => {
 
                     {/* Delete Test */}
                     <View style={[styles.deletedatewrapper, styles.singledetailwrapper, styles.flexcss]}>
-                        <Text style={styles.testdates}>02/23/223</Text>
-                        <TouchableOpacity>
+                        <Text style={styles.testdates}>{test.testDate}</Text>
+                        <TouchableOpacity onPress={()=> deleteOneClinicalTestRecord(test.testId)}>
                             <Image source={require('../assets/images/purple-delete-icon.png')} style={styles.ppldeleteicon} />
                         </TouchableOpacity>
                     </View> 
@@ -117,7 +144,7 @@ const ViewClinicalData = ({ navigation, route  }) => {
         <View style={styles.innercontainer}>
             {/* Deletebutton */}
             <View style={styles.deletebtncontainer}>
-                <TouchableOpacity style={styles.deletebutton}>
+                <TouchableOpacity style={styles.deletebutton} onPress={()=>deleteAllPatientClinicalTestData()}>
                     <Image source={require('../assets/images/delete-icon.png')} style={styles.deleteicon} />
                     <Text style={styles.dltbuttonText}>Delete All Tests </Text>
                 </TouchableOpacity>
