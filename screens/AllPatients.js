@@ -10,7 +10,7 @@ const AllPatientsScreen = ({ navigation }) => {
   const [patientData, setPatientData] = useState();
   
   //this will be the link to server for fetch commands, https://localhost:4000/patients
-  const FETCHAPILINK = 'https://5153-99-211-193-59.ngrok.io/patients'; //currently this link is a ngrok temporary public rebound IP for locahost
+  const FETCHAPILINK = 'https://2602-142-112-133-137.ngrok.io/patients'; //currently this link is a ngrok temporary public rebound IP for locahost
   //It was used for testing purposes until server is properly hosted online, code works as expected, once web server is fully hosted online,
   //app will be able to act as front-end fully.
 
@@ -87,20 +87,16 @@ const AllPatientsScreen = ({ navigation }) => {
     }).then((response) => response.json()).then((returnedJSON) => {
       alert("!Patient with Id: "+ pid +", has beeen Deleted!")//alert to indicate files have been deleted
       console.log(returnedJSON);
-      setPatientData(); //update state to refresh page to show that data has been deleted
+      // setPatientData(); //update state to refresh page to show that data has been deleted
+      getAllPatientData();
      }).catch((DeleteOneError) => {
       console.log(DeleteOneError);     
     })
   }
 
   const navCheck = (pid) => {
-    navigation.navigate('PatientDetails', {pid})
+    navigation.navigate('PatientDetails', {patientid:pid})
   }
-
-  const backToAllPatientsPage = (pid) => {
-    navigation.navigate('AllPatients')
-  }
-
 
   //used to immediately display all patients upon screen being loaded
   useEffect(()=>{
@@ -130,7 +126,7 @@ const AllPatientsScreen = ({ navigation }) => {
             <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navCheck(patient.patientId)} id="delete">
               <Text style={[styles.buttonText, styles.viewbtntxt]}>View</Text>
             </TouchableOpacity> 
-            <TouchableOpacity style={[styles.cardbtn,styles.removebtn]} onPress={deleteOnePatientRecord(patient.patientId)}>
+            <TouchableOpacity style={[styles.cardbtn,styles.removebtn]} onPress={() => deleteOnePatientRecord(patient.patientId)}>
               <Text style={[styles.buttonText,styles.removebtntxt]}>Remove</Text>
             </TouchableOpacity>
           </View>
