@@ -7,7 +7,7 @@ import RadioButtonGroup from '../components/RadioButtonGroup';
 
 
 const AddPatient = ({ navigation }) => {
-    const FETCHAPILINK = 'https://b9aa-99-211-193-59.ngrok.io/patients'; 
+    const FETCHAPILINK = 'https://2602-142-112-133-137.ngrok.io/patients'; 
 
     const [patientId, setPateintId] = useState(0);
     const [firstName, setFirstname] = useState('');
@@ -172,7 +172,7 @@ const AddPatient = ({ navigation }) => {
                 </View>
                     {/* () => navigation.navigate('ViewClinicalData') */}
                 <View style={styles.submitwrapper}>
-                    <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={addNewPatient()} > 
+                    <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => addNewPatient()} > 
                         <Text style={[styles.buttonText, styles.viewbtntxt]}>Add Patient</Text>
                     </TouchableOpacity> 
                 </View>

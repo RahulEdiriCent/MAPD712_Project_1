@@ -3,6 +3,8 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
 
 const PatientDetails = ({ navigation }) => {
+    const FETCHAPILINK = 'https://5153-99-211-193-59.ngrok.io/patients'
+    
   return (
     <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.innercontainer}>

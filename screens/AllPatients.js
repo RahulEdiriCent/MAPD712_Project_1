@@ -93,6 +93,15 @@ const AllPatientsScreen = ({ navigation }) => {
     })
   }
 
+  const navCheck = (pid) => {
+    navigation.navigate('PatientDetails', {pid})
+  }
+
+  const backToAllPatientsPage = (pid) => {
+    navigation.navigate('AllPatients')
+  }
+
+
   //used to immediately display all patients upon screen being loaded
   useEffect(()=>{
     getAllPatientData();
@@ -118,7 +127,7 @@ const AllPatientsScreen = ({ navigation }) => {
             </View>
           </View>
           <View style={[styles.cardbtncontainer, styles.flexcss]}>
-            <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('PatientDetails')} id="delete">
+            <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navCheck(patient.patientId)} id="delete">
               <Text style={[styles.buttonText, styles.viewbtntxt]}>View</Text>
             </TouchableOpacity> 
             <TouchableOpacity style={[styles.cardbtn,styles.removebtn]} onPress={deleteOnePatientRecord(patient.patientId)}>
