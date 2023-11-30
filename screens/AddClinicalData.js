@@ -7,6 +7,7 @@ const AddClinicalData = ({ navigation, route }) => {
     const [nursename, setNursename] = useState('');
     const [testId, setTestId] = useState('');
     const [status, setStatus] = useState('');
+    const [testDate, setTestDate] = useState('');
     const [type, setType] = useState('');
     const [category, setCategory] = useState('');
     const [readingValues, setRValues] = useState('');
@@ -45,9 +46,14 @@ const AddClinicalData = ({ navigation, route }) => {
             return;
         }
     
-        // Validate readings have at least one comma
-        if (!readingValues.includes(',')) {
+        // Validate readings have at least one comma if below categories
+        if (!readingValues.includes(',') && (["Blood Test", "Heart Beat Rate"].includes(category))) {
             alert("Readings must have at least One comma: Seperate readings");
+            return;
+        }
+
+        if (readingValues.includes(',') && (["Respiratory Rate", "Blood Oxygen Level"].includes(category))) {
+            alert("Only One reading, no commas for this category of Test");
             return;
         }
         var r = setReadingsData(readingValues)
@@ -66,6 +72,7 @@ const AddClinicalData = ({ navigation, route }) => {
                 testId: testId, //change later to be auto-number
                 patientid: String(patientid),
                 status: status,
+                testDate: testDate,
                 nurse_name: nursename,
                 type:type,
                 category: category,
@@ -90,19 +97,19 @@ const AddClinicalData = ({ navigation, route }) => {
             theArray = [["dialstolic",theValues[0]], ["systolic", theValues[1]]]
             break;
 
-            case "Respiratory Rate": //Pressure
-            theValues = readingsData.split(',');
-            theArray = [["dialstolic",theValues[0]], ["systolic", theValues[1]]]
+            case "Respiratory Rate":
+            theValues = readingsData;
+            theArray = [["Rate (breaths/min)", theValues]];
             break;
 
-            case "Blood Oxygen Level": //Pressure
-            theValues = readingsData.split(',');
-            theArray = [["dialstolic",theValues[0]], ["systolic", theValues[1]]]
+            case "Blood Oxygen Level":
+            theValues = readingsData;
+            theArray = [["Blood Oxygen Percentage",theValues]]
             break;
 
-            case "Heart Beat Rate": //Pressure
+            case "Heart Beat Rate":
             theValues = readingsData.split(',');
-            theArray = [["Beat-Rate",theValues[0]], ["Heart-Beat", theValues[1]]]
+            theArray = [["Beat-Rate (beats/min)",theValues[0]], ["Heart-Beat Status", theValues[1]]]
             break;
             default: break;
         }
@@ -136,14 +143,13 @@ const AddClinicalData = ({ navigation, route }) => {
                     />
                 </View>
 
-
                 <View style={styles.inputwrapper}>
-                    <Text style={styles.inputlabel}>Status</Text>
+                    <Text style={styles.inputlabel}>Test Date</Text>
                     <TextInput
                         style={styles.input}
-                        value={status}
+                        value={testDate}
                         onChangeText={(text) => setStatus(text)}
-                        placeholder="Enter Status"
+                        placeholder="Enter Test Date"
                     />
                 </View>
 

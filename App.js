@@ -25,7 +25,7 @@ const App = () => {
         <Stack.Screen name="AddPatient" component={AddPatient} />
         <Stack.Screen name="EditPatient" component={EditPatient} />
         <Stack.Screen name="AddClinicalData" component={AddClinicalData} />
-        <Stack.Screen name="SeachPatientByName" component={SearchPatientByName} />
+        <Stack.Screen name="SearchPatientByName" component={SearchPatientByName} />
       </Stack.Navigator>
     </NavigationContainer>
   );

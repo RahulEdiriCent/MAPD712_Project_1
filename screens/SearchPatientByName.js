@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
-const SeachPatientByName = ({ navigation }) => {
+const SearchPatientByName = ({ navigation }) => {
   const [patientData, setPatientData] = useState([]);
   const [searchText, setSearchText] = useState('');
 
-  const FETCHAPILINK = 'https://48c2-142-112-133-137.ngrok.io/patients';
+  const FETCHAPILINK = 'https://mapd713-api-group13.onrender.com/patients';
 
   const getAllPatientData = async () => {
     await fetch(FETCHAPILINK, {
@@ -18,6 +18,10 @@ const SeachPatientByName = ({ navigation }) => {
         console.log(getAllError);
       });
   };
+
+  const whenFilterConditionChosen = async () => {
+    
+  }
 
   const deleteOnePatientRecord = async (pid) => {
     await fetch(FETCHAPILINK + "/" + pid, {
@@ -238,4 +242,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SeachPatientByName;
+export default SearchPatientByName;

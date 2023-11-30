@@ -1,6 +1,6 @@
 // DetailsScreen.js
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, ScrollView, Button} from 'react-native';
+import { View, Text, FlatList, TextInput, Image, StyleSheet, TouchableOpacity, ScrollView, Button} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 const AllPatientsScreen = ({ navigation }) => {
@@ -8,6 +8,7 @@ const AllPatientsScreen = ({ navigation }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState();
   const [patientData, setPatientData] = useState();
+  const [searchText, setSearchText] = useState('');
   
   //this will be the link to server for fetch commands, https://localhost:4000/patients
   const FETCHAPILINK = 'https://mapd713-api-group13.onrender.com/patients';
@@ -65,6 +66,22 @@ const AllPatientsScreen = ({ navigation }) => {
     })
   }
 
+  const searchByName = async (nameToSearch) => {
+    //navigation.navigate('SearchPatientByName')
+    
+      await fetch(FETCHAPILINK + "/search/name/" + nameToSearch, {
+        method: 'GET' //use get method
+      }).then((response) => response.json()).then((returnedJSON) => {
+      //console.log(json);
+      const temp_data_hold = returnedJSON.map(item => item);
+        setPatientData(temp_data_hold);
+      })
+      .catch((getAllError) => {
+        console.log(getAllError);     
+      })
+    
+  }
+
   //delete all patients functionality integration with 713 API--
   const deleteAllPatientData = async ()=>{
     
@@ -97,6 +114,8 @@ const AllPatientsScreen = ({ navigation }) => {
   const navCheck = (pid) => {
     navigation.navigate('PatientDetails', {patientid:pid})
   }
+
+  
 
   //used to immediately display all patients upon screen being loaded
   useEffect(()=>{
@@ -161,6 +180,21 @@ const AllPatientsScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
     </View>
+    <View style={[styles.topbarcontainer, styles.flexcss]}>
+        <View style={[styles.searchInputContainer, styles.innerbox]}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search by name"
+            value={searchText}
+            onChangeText={(text) => setSearchText(text)}
+          />
+        </View>
+        <View>
+          <TouchableOpacity style={styles.filterarea} onPress={() => searchByName(searchText)}>
+            <Text style={styles.filterTOText}>Filter</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     {/*<ScrollView>*/}
     <View style={styles.innercontainer}>
       {/* List section */}
@@ -308,7 +342,16 @@ const styles = StyleSheet.create({
   },
   dropdownstyle: {
     zIndex: 8,
-  }
+  },
+  searchInputContainer: {
+    width: '100%',
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingLeft: 8,
+    height: 40,
+  },
 });
 
 export default AllPatientsScreen;
