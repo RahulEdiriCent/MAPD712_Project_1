@@ -9,9 +9,9 @@ import ViewClinicalData from './screens/ViewClinicalData';
 import AddPatient from './screens/AddPatient';
 import EditPatient from './screens/EditPatient';
 import AddClinicalData from './screens/AddClinicalData';
+import SearchPatientByName from './screens/SearchPatientByName';
 
 const Stack = createStackNavigator();
-
 
 //By Kajal Patel and Rahul Edirisinghe (Group 14)
 const App = () => {
@@ -24,7 +24,8 @@ const App = () => {
         <Stack.Screen name="ViewClinicalData" component={ViewClinicalData} />
         <Stack.Screen name="AddPatient" component={AddPatient} />
         <Stack.Screen name="EditPatient" component={EditPatient} />
-  <Stack.Screen name="AddClinicalData" component={AddClinicalData} />{/**/}
+        <Stack.Screen name="AddClinicalData" component={AddClinicalData} />
+        <Stack.Screen name="SeachPatientByName" component={SearchPatientByName} />
       </Stack.Navigator>
     </NavigationContainer>
   );
