@@ -29,7 +29,7 @@ const AddClinicalData = ({ navigation, route }) => {
         }
     
         // Validate all fields are filled
-        if (!testId || !status || !nursename || !type || !category || !readingValues) {
+        if (!testId || !testDate || !nursename || !type || !category || !readingValues) {
             alert("No Field can be Left Empty");
             return;
         }
