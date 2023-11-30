@@ -1,10 +1,10 @@
 // PatientDetailed.js
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from 'react'; 
 import { View, Text, Button, StyleSheet, ScrollView, TextInput, RadioForm, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RadioButtonGroup from '../components/RadioButtonGroup';
 
-const EditPatient = ({ navigation }) => {
+const EditPatient = ({ navigation, route }) => {
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [address, setAddress] = useState('');
@@ -13,17 +13,86 @@ const EditPatient = ({ navigation }) => {
     const [department, setDepartment] = useState('');
     const [doctor, setDoctor] = useState('');
     const [gender, setRadioValue] = useState('');
+    const [condition, setCondition] = useState('');
+    const [tests, setTests] = useState([])
     const genders= ['Male', 'Female'];
     
     // Date picker value
-    const [DOB, setDOB] = useState(); //new Date()
+    const [DOB, setDOB] = useState(''); //new Date()
     const [showDatePicker, setShowDatePicker] = useState(false);
 
+    const {patientid} = route.params;
+    const FETCHAPILINK = 'https://mapd713-api-group13.onrender.com/patients/';
+    const [patientData, setPatientData] = useState(); 
+
+    //Fetch all patients functionality integration with 713 API--
+    const getPatientData = async()=>{
+        //replace with proper api ip
+        await fetch(FETCHAPILINK+patientid , {
+        method: 'GET' //use get method
+        }).then((response) => response.json()).then((returnedJSON) => {
+        //console.log(json);
+        console.log(returnedJSON)
+        console.log("")
+        const temp_data_hold = returnedJSON;
+        setPatientData(temp_data_hold);
+        setFirstname(temp_data_hold.firstName);
+        setLastname(temp_data_hold.lastName);
+        setAddress(temp_data_hold.address);
+        setAge(String(temp_data_hold.age));
+        setPhonenumber(temp_data_hold.phoneNumber);
+        setDepartment(temp_data_hold.department);
+        setDoctor(temp_data_hold.doctor);
+        setRadioValue(temp_data_hold.gender);
+        setDOB(temp_data_hold.date_of_birth);
+        setCondition(temp_data_hold.condition)
+        setTests(temp_data_hold.tests);
+        })
+        .catch((getAllError) => {
+        console.log(getAllError);     
+        })
+    }
+
+    const editPatientData = async()=>{
+        //replace with proper api ip
+        await fetch(FETCHAPILINK+patientid , {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                patientId: patientid, //change later to be auto-number
+                firstName: firstname,
+                lastName: lastname,
+                age: Number(age),
+                gender:gender,
+                address: address,
+                date_of_birth: DOB,
+                department: department,
+                condition:  condition, //temp placement here as to allow for condition handling or "Normal"
+                doctor:  doctor,
+                tests: tests
+            }),
+        }).then((response) => response.json()).then((returnedJSON) => {
+            alert("Patient Editted");
+            console.log("Patient Editted");
+        }).catch((getAllError) => {
+            console.log(getAllError);     
+        })
+    }
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || DOB;
         setShowDatePicker(false);
         setDOB(currentDate);
     };
+
+    useEffect(()=>{
+        console.log("----=----")
+        getPatientData();
+        //console.log(patientData + " " + patientid)
+        
+    }, []);
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -38,7 +107,7 @@ const EditPatient = ({ navigation }) => {
                         style={styles.input}
                         value={firstname}
                         onChangeText={(text) => setFirstname(text)}
-                        placeholder="Enter your first name"
+                        placeholder="Enter new Patient name"
                     />
                 </View>
 
@@ -48,7 +117,7 @@ const EditPatient = ({ navigation }) => {
                         style={styles.input}
                         value={lastname}
                         onChangeText={(text) => setLastname(text)}
-                        placeholder="Enter your last name"
+                        placeholder="Enter new Patient last name"
                     />
                 </View>
 
@@ -60,7 +129,7 @@ const EditPatient = ({ navigation }) => {
                         onChangeText={(text) => setAddress(text)}
                         multiline={true}
                         numberOfLines={4}
-                        placeholder="Enter your address"
+                        placeholder="Enter new Patient address"
                     />
                 </View>
 
@@ -70,7 +139,7 @@ const EditPatient = ({ navigation }) => {
                         style={styles.input}
                         value={age}
                         onChangeText={(text) => setAge(text)}
-                        placeholder="Enter your age"
+                        placeholder="Enter new Patient age"
                     />
                 </View>
             
@@ -90,7 +159,7 @@ const EditPatient = ({ navigation }) => {
                         style={styles.input}
                         value={DOB}
                         onChangeText={(text) => setDOB(text)}
-                        placeholder="Enter your Date of Birth"
+                        placeholder="Enter new Patient Date of Birth"
                     />
                 </View>
                
@@ -100,7 +169,7 @@ const EditPatient = ({ navigation }) => {
                         style={styles.input}
                         value={phonenumber}
                         onChangeText={(text) => setPhonenumber(text)}
-                        placeholder="Enter your phone number"
+                        placeholder="Enter new patient Phone number"
                     />
                 </View>
 
@@ -110,7 +179,17 @@ const EditPatient = ({ navigation }) => {
                         style={styles.input}
                         value={department}
                         onChangeText={(text) => setDepartment(text)}
-                        placeholder="Enter department type"
+                        placeholder="Enter new Department type"
+                    />
+                </View>
+
+                <View style={styles.inputwrapper}>
+                    <Text style={styles.inputlabel}>Condition</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={condition}
+                        onChangeText={(text) => setCondition(text)}
+                        placeholder="Enter new Patient Condition"
                     />
                 </View>
 
@@ -120,7 +199,7 @@ const EditPatient = ({ navigation }) => {
                         style={styles.input}
                         value={doctor}
                         onChangeText={(text) => setDoctor(text)}
-                        placeholder="Enter doctor name"
+                        placeholder="Enter new Patient doctor name"
                     />
                 </View>
 
@@ -133,7 +212,7 @@ const EditPatient = ({ navigation }) => {
                 </View>
 
                 <View style={styles.submitwrapper}>
-                    <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('ViewClinicalData')} >
+                    <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => editPatientData()} >
                         <Text style={[styles.buttonText, styles.viewbtntxt]}>Edit Patient</Text>
                     </TouchableOpacity> 
                 </View>

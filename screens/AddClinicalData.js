@@ -3,17 +3,113 @@ import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, ScrollView, TextInput, RadioForm, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const AddClinicalData = ({ navigation }) => {
+const AddClinicalData = ({ navigation, route }) => {
     const [nursename, setNursename] = useState('');
-    const [systolic, setSystolic] = useState('');
-    const [diastolic, setDiastolic] = useState('');
-    const [respiratoryrule, setRespiratoryRule] = useState('');
-    const [bloodoxygen, setBloodoxygen] = useState('');
-    const [heartbeat, setHeartbeat] = useState('');
+    const [testId, setTestId] = useState('');
+    const [status, setStatus] = useState('');
+    const [type, setType] = useState('');
+    const [category, setCategory] = useState('');
+    const [readingValues, setRValues] = useState('');
+    const [readings, setReadings] = useState();
     
     // Date picker value
     const [DOB, setDOB] = useState(); //new Date()
     const [showDatePicker, setShowDatePicker] = useState(false);
+
+
+    const {patientid} = route.params;
+    const FETCHAPILINK = 'https://mapd713-api-group13.onrender.com/patients/';
+
+    const addNewTest = async()=>{//not functional with API 
+
+        if (isNaN(testId)) {
+            alert("Test Id must be a Number: No Other Characters");
+            return;
+        }
+    
+        // Validate all fields are filled
+        if (!testId || !status || !nursename || !type || !category || !readingValues) {
+            alert("No Field can be Left Empty");
+            return;
+        }
+    
+        // Validate category
+        if (!["Blood Test", "Respiratory Rate", "Blood Oxygen Level", "Heart Beat Rate"].includes(category)) {
+            alert("Category must be Blood Test, Respiratory Rate, Blood Oxygen Level, Heart Beat Rate");
+            return;
+        }
+    
+        // Validate nurse name and type don't have numbers
+        if (/\d/.test(nursename) || /\d/.test(type)) {
+            alert("Nurse's Name and Test Type cannot contain numbers");
+            return;
+        }
+    
+        // Validate readings have at least one comma
+        if (!readingValues.includes(',')) {
+            alert("Readings must have at least One comma: Seperate readings");
+            return;
+        }
+        var r = setReadingsData(readingValues)
+         
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        console.log(readings)
+        
+        await fetch(FETCHAPILINK + patientid + "/tests", {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                testId: testId, //change later to be auto-number
+                patientid: String(patientid),
+                status: status,
+                nurse_name: nursename,
+                type:type,
+                category: category,
+                readings: r
+            }),
+        }).then((response) => response.json()).then((json) => {
+            //console.log(json);
+            alert("Test Added for Patient");
+            console.log("Test Added");
+         })
+        .catch((error) => {
+          console.log(error);     
+        });
+    }
+
+    const setReadingsData = (readingsData) => {
+        var theArray = [[]];
+        var theValues = [];
+        switch(category){
+            case "Blood Test": //Pressure
+            theValues = readingsData.split(',');
+            theArray = [["dialstolic",theValues[0]], ["systolic", theValues[1]]]
+            break;
+
+            case "Respiratory Rate": //Pressure
+            theValues = readingsData.split(',');
+            theArray = [["dialstolic",theValues[0]], ["systolic", theValues[1]]]
+            break;
+
+            case "Blood Oxygen Level": //Pressure
+            theValues = readingsData.split(',');
+            theArray = [["dialstolic",theValues[0]], ["systolic", theValues[1]]]
+            break;
+
+            case "Heart Beat Rate": //Pressure
+            theValues = readingsData.split(',');
+            theArray = [["Beat-Rate",theValues[0]], ["Heart-Beat", theValues[1]]]
+            break;
+            default: break;
+        }
+        console.log(theArray);
+        //setReadings(theArray);
+        return theArray;
+    }
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || DOB;
@@ -29,6 +125,29 @@ const AddClinicalData = ({ navigation }) => {
                     <Text style={styles.title}>Add New Clinical Test</Text>
 
                     {/*  Start fields */}
+    
+
+                    <Text style={styles.inputlabel}>TestId:</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={testId}
+                        onChangeText={(text) => setTestId(text)}
+                        placeholder="Test Id"
+                    />
+                </View>
+
+
+                <View style={styles.inputwrapper}>
+                    <Text style={styles.inputlabel}>Status</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={status}
+                        onChangeText={(text) => setStatus(text)}
+                        placeholder="Enter Status"
+                    />
+                </View>
+
+                <View style={styles.inputwrapper}>
                     <Text style={styles.inputlabel}>Nurse Name:</Text>
                     <TextInput
                         style={styles.input}
@@ -38,83 +157,39 @@ const AddClinicalData = ({ navigation }) => {
                     />
                 </View>
 
-                <View style={[styles.bloodinputwrapper, styles.inputwrapper]}>
-                    <View style={styles.bloodinputs}>
-                        <Text style={styles.inputlabel}>Systolic</Text>
-                        <TextInput
-                            style={styles.input}
-                            value={systolic}
-                            onChangeText={(text) => setSystolic(text)}
-                            placeholder="Enter systolic"
-                        />
-                    </View>
-                    <View style={styles.bloodinputs}>
-                        <Text style={styles.inputlabel}>Diastolic</Text>
-                        <TextInput
-                            style={styles.input}
-                            value={diastolic}
-                            onChangeText={(text) => setDiastolic(text)}
-                            placeholder="Enter diastolic"
-                        />
-                    </View>
-                </View>
-
                 <View style={styles.inputwrapper}>
-                    <Text style={styles.inputlabel}>Respiratory rate</Text>
+                    <Text style={styles.inputlabel}>Type:</Text>
                     <TextInput
                         style={styles.input}
-                        value={respiratoryrule}
-                        onChangeText={(text) => setRespiratoryRule(text)}
-                        placeholder="Enter respiratory rate"
-                    />
-                </View>
-               
-                <View style={styles.inputwrapper}>
-                    <Text style={styles.inputlabel}>Blood oxygen Level</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={bloodoxygen}
-                        onChangeText={(text) => setBloodoxygen(text)}
-                        placeholder="Enter blood oxygen level"
+                        value={type}
+                        onChangeText={(text) => setType(text)}
+                        placeholder="Enter Type"
                     />
                 </View>
 
-                <View style={styles.inputwrapper}>
-                    <Text style={styles.inputlabel}>HeartBeat rate</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={heartbeat}
-                        onChangeText={(text) => setHeartbeat(text)}
-                        placeholder="Enter heartBeat rate"
-                    />
-                </View>
 
                 <View style={styles.inputwrapper}>
-                    <Text style={styles.inputlabel}>DOB</Text>
-                    {/*<DateTimePicker
-                        value={DOB}
-                        mode="date"
-                        is24Hour={true}
-                        display="default"
-                        onChange={onChange}
-                        style={styles.datePicker}
-                        textColor="#FF0000" // Customize text color
-                        testID="dateTimePicker"
-                    />*/}
+                    <Text style={styles.inputlabel}>Test Category:</Text>
                     <TextInput
                         style={styles.input}
-                        value={DOB}
-                        onChangeText={(text) => setDOB(text)}
-                        placeholder="Enter Date of Birth"
+                        value={category}
+                        onChangeText={(text) => setCategory(text)}
+                        placeholder="Enter Test Category"
                     />
                 </View>
-
+            
                 <View style={styles.inputwrapper}>
-                    <Text style={styles.inputlabel}>Radio Buttons</Text>
+                    <Text style={styles.inputlabel}>Readings</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={readingValues}
+                        onChangeText={(text) => setRValues(text)}
+                        placeholder="Enter Readings: In order seperated by Comma"
+                    />
                 </View>
 
                 <View style={styles.submitwrapper}>
-                    <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => navigation.navigate('ViewClinicalData')} >
+                    <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => addNewTest()} >
                         <Text style={[styles.buttonText, styles.viewbtntxt]}>Add Test</Text>
                     </TouchableOpacity> 
                 </View>

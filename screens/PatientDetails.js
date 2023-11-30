@@ -4,7 +4,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView} from 'reac
 
 const PatientDetails = ({ navigation , route }) => {
     const {patientid} = route.params;
-    const FETCHAPILINK = 'https://9f1f-142-112-133-137.ngrok.io/patients/';
+    const FETCHAPILINK = 'https://mapd713-api-group13.onrender.com/patients/';
     const [patientData, setPatientData] = useState(); 
 
     //Fetch all patients functionality integration with 713 API--
@@ -45,6 +45,13 @@ const PatientDetails = ({ navigation , route }) => {
         navigation.navigate('ViewClinicalData', {patientId: pid})
     }
 
+    const toEditPatientPage = (pid) => {
+        navigation.navigate('EditPatient', {patientid: pid})
+    }
+    const toAddTestPage = (pid) => {
+        navigation.navigate('AddClinicalData', {patientid:pid})
+    }
+
     useEffect(()=>{
         getPatientData();
     }, []);
@@ -62,7 +69,7 @@ const PatientDetails = ({ navigation , route }) => {
                         <Text style={styles.patientid}>ID: <Text>{patientData.patientId}</Text></Text>
                     </View>
                     <View>
-                        <TouchableOpacity style={[styles.editbtn,styles.viewbtn]} onPress={() => navigation.navigate('EditPatient')} >
+                        <TouchableOpacity style={[styles.editbtn,styles.viewbtn]} onPress={() => toEditPatientPage(patientData.patientId)} >
                             <Text style={[styles.buttonText, styles.viewbtntxt]}>Edit Details</Text>
                         </TouchableOpacity> 
                     </View>
@@ -143,7 +150,7 @@ const PatientDetails = ({ navigation , route }) => {
                 <TouchableOpacity style={[styles.cardbtn,styles.viewbtn]} onPress={() => toClinicalDataPage(patientData.patientId)} >
                     <Text style={[styles.buttonText, styles.viewbtntxt]}>View Clinical Data</Text>
                 </TouchableOpacity> 
-                <TouchableOpacity style={[styles.cardbtn,styles.removebtn]} onPress={() => navigation.navigate('AddClinicalData')} >
+                <TouchableOpacity style={[styles.cardbtn,styles.removebtn]} onPress={() => toAddTestPage(patientData.patientId)} >
                     <Text style={[styles.buttonText,styles.removebtntxt]}>Add Clinical Data</Text>
                 </TouchableOpacity>   
             </View>

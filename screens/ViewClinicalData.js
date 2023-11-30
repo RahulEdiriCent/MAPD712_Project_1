@@ -5,7 +5,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 const ViewClinicalData = ({ navigation, route  }) => {
     const {patientId} = route.params;
-    const FETCHAPILINK = 'https://9f1f-142-112-133-137.ngrok.io/patients/';
+    const FETCHAPILINK = 'https://mapd713-api-group13.onrender.com/patients/';
     const [clinicalData, setClinicalData] = useState();
     //
   const [chosenDateFirst, setChosenDateFirst] = useState(); //new Date()
