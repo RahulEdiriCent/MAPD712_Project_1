@@ -148,7 +148,7 @@ const AddClinicalData = ({ navigation, route }) => {
                     <TextInput
                         style={styles.input}
                         value={testDate}
-                        onChangeText={(text) => setStatus(text)}
+                        onChangeText={(text) => setTestDate(text)}
                         placeholder="Enter Test Date"
                     />
                 </View>
