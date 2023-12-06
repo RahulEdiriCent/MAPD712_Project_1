@@ -23,20 +23,36 @@ const AllPatientsScreen = ({ navigation }) => {
   ] 
 
   //Fetch all patients who are in the asked for condition: "Critical" or "Normal"
-  const getPatientsWithCondition = async(filterCondition)=>{
-    console.log("Searching...")
-    //used thgis endpoint for easy searching and differentiate from get patients/ endpoint 
-    await fetch((FETCHAPILINK + '/search/condition/' + filterCondition ), {
-      method: 'GET' //use get method
-    }).then((response) => response.json()).then((returnedJSON) => {
-     //console.log(json);
-      const temp_data_hold = returnedJSON.map(item => item);
-      setPatientData(temp_data_hold);
-     })
-    .catch((getWithConditionError) => {
-      console.log(getWithConditionError);     
-    }) 
-  }
+  // const getPatientsWithCondition = async(filterCondition)=>{
+  //   console.log("Searching...")
+  //   //used thgis endpoint for easy searching and differentiate from get patients/ endpoint 
+  //   await fetch((FETCHAPILINK + '/search/condition/' + filterCondition ), {
+  //     method: 'GET' //use get method
+  //   }).then((response) => response.json()).then((returnedJSON) => {
+  //    //console.log(json);
+  //     const temp_data_hold = returnedJSON.map(item => item);
+  //     setPatientData(temp_data_hold);
+  //    })
+  //   .catch((getWithConditionError) => {
+  //     console.log(getWithConditionError);     
+  //   }) 
+  // }
+
+// Fetch all patients who are in the asked for condition: "Critical" or "Normal"
+const getPatientsWithCondition = async (filterCondition) => {
+  console.log("Searching...")
+  // Used this endpoint for easy searching and differentiate from get patients/ endpoint 
+  await fetch((FETCHAPILINK + '/search/condition/' + filterCondition), {
+    method: 'GET' // Use get method
+  }).then((response) => response.json()).then((returnedJSON) => {
+    // Check if returnedJSON is an array, if not, set an empty array
+    const temp_data_hold = Array.isArray(returnedJSON) ? returnedJSON : [];
+    setPatientData(temp_data_hold);
+  })
+  .catch((getWithConditionError) => {
+    console.log(getWithConditionError);
+  })
+}
 
   //delete all functionality integration with 713 API
   const whenFilterConditionChosen = async ()=>{
@@ -57,7 +73,7 @@ const AllPatientsScreen = ({ navigation }) => {
     await fetch(FETCHAPILINK , {
       method: 'GET' //use get method
     }).then((response) => response.json()).then((returnedJSON) => {
-     //console.log(json);
+     console.log(returnedJSON);
      const temp_data_hold = returnedJSON.map(item => item);
       setPatientData(temp_data_hold);
      })
@@ -72,7 +88,7 @@ const AllPatientsScreen = ({ navigation }) => {
       await fetch(FETCHAPILINK + "/search/name/" + nameToSearch, {
         method: 'GET' //use get method
       }).then((response) => response.json()).then((returnedJSON) => {
-      //console.log(json);
+      console.log(returnedJSON);
       const temp_data_hold = returnedJSON.map(item => item);
         setPatientData(temp_data_hold);
       })
@@ -180,7 +196,7 @@ const AllPatientsScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
     </View>
-    <View style={[styles.topbarcontainer, styles.flexcss]}>
+    <View style={[ styles.flexcss]}>
         <View style={[styles.searchInputContainer, styles.innerbox]}>
           <TextInput
             style={styles.searchInput}

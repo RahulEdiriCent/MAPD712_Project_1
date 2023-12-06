@@ -1,0 +1,204 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HomeScreen renders correctly 1`] = `
+<View
+  accessibilityIgnoresInvertColors={true}
+  style={
+    {
+      "flex": 1,
+      "resizeMode": "cover",
+    }
+  }
+>
+  <Image
+    source={
+      {
+        "testUri": "../../../assets/images/background-image.jpg",
+      }
+    }
+    style={
+      [
+        {
+          "bottom": 0,
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+        },
+        {
+          "height": undefined,
+          "width": undefined,
+        },
+        undefined,
+      ]
+    }
+  />
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "flex": 1,
+          "justifyContent": "center",
+        }
+      }
+    >
+      <Image
+        source={
+          {
+            "testUri": "../../../assets/images/logo.png",
+          }
+        }
+        style={
+          {
+            "height": 150,
+            "marginBottom": 20,
+            "position": "absolute",
+            "top": 150,
+            "width": 180,
+          }
+        }
+      />
+      <View
+        style={
+          {
+            "alignItems": "center",
+            "bottom": 50,
+            "justifyContent": "center",
+            "position": "absolute",
+            "width": "100%",
+          }
+        }
+      >
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            {
+              "backgroundColor": "#6B81DC",
+              "borderColor": "#6B81DC",
+              "borderRadius": 8,
+              "borderWidth": 1,
+              "marginBottom": 10,
+              "marginTop": 10,
+              "opacity": 1,
+              "paddingBottom": 12,
+              "paddingTop": 12,
+              "width": 330,
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#fff",
+                "fontSize": 16,
+                "fontWeight": "600",
+                "textAlign": "center",
+              }
+            }
+          >
+            View All Patient
+          </Text>
+        </View>
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            {
+              "backgroundColor": "transparent",
+              "borderColor": "#6B81DC",
+              "borderRadius": 8,
+              "borderWidth": 1,
+              "marginBottom": 10,
+              "marginTop": 10,
+              "opacity": 1,
+              "paddingBottom": 12,
+              "paddingTop": 12,
+              "width": 330,
+            }
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "color": "#fff",
+                  "fontSize": 16,
+                  "fontWeight": "600",
+                  "textAlign": "center",
+                },
+                {
+                  "color": "#6B81DC",
+                  "fontWeight": 600,
+                },
+              ]
+            }
+          >
+            Add New Patient
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;

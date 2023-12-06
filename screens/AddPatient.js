@@ -4,12 +4,10 @@ import { View, Text, Button, StyleSheet, ScrollView, TextInput, RadioForm, Touch
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RadioButtonGroup from '../components/RadioButtonGroup';
 
-
-
 const AddPatient = ({ navigation }) => {
     const FETCHAPILINK = 'https://mapd713-api-group13.onrender.com/patients'; 
 
-    const [patientId, setPateintId] = useState(0);
+    const [patientId, setPateintId] = useState('');
     const [firstName, setFirstname] = useState('');
     const [lastName, setLastname] = useState('');
     const [address, setAddress] = useState('');
@@ -32,8 +30,8 @@ const AddPatient = ({ navigation }) => {
         setDOB(currentDate);
     };
 
-    
     const addNewPatient = async()=>{//not functional with API 
+        console.log("in func");
         await fetch(FETCHAPILINK, {
             method: 'POST',
             headers: {
@@ -41,7 +39,7 @@ const AddPatient = ({ navigation }) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                patientId: patientId, //change later to be auto-number
+                patientId: Number(patientId), //change later to be auto-number
                 firstName: firstName,
                 lastName: lastName,
                 age: age,
@@ -49,7 +47,7 @@ const AddPatient = ({ navigation }) => {
                 address: address,
                 date_of_birth: DOB,
                 department: department,
-                condition:  condition, //temp placement here as to allow for condition handling or "Normal"
+                condition: "Normal", //temp placement here as to allow for condition handling or "Normal"
                 doctor:  doctor,
                 tests: []
             }),
@@ -71,6 +69,16 @@ const AddPatient = ({ navigation }) => {
                     <Text style={styles.title}>Add New Patient</Text>
 
                     {/*  Start fields */}
+                    <Text style={styles.inputlabel}>Patient Id:</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={patientId}
+                        onChangeText={(text) => setPateintId(text)}
+                        placeholder="Enter Unique Patient Id"
+                    />
+                </View>
+
+                <View style={styles.inputwrapper}>
                     <Text style={styles.inputlabel}>First Name</Text>
                     <TextInput
                         style={styles.input}

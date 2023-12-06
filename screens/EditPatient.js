@@ -88,7 +88,6 @@ const EditPatient = ({ navigation, route }) => {
     };
 
     useEffect(()=>{
-        console.log("----=----")
         getPatientData();
         //console.log(patientData + " " + patientid)
         
