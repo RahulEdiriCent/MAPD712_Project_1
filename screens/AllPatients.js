@@ -211,10 +211,10 @@ const getPatientsWithCondition = async (filterCondition) => {
           </TouchableOpacity>
         </View>
       </View>
-    {/*<ScrollView>*/}
-    <View style={styles.innercontainer}>
+     {/*<ScrollView>*/}
+     <View style={styles.innercontainer}>
       {/* List section */}
-      <View style={styles.cardwrapper} >      
+      <View style={styles.scrollContainer} >      
         <FlatList
           data={patientData}
           renderItem={({item}) => < PatientDisplayCard patient={item}  />}
@@ -229,12 +229,18 @@ const getPatientsWithCondition = async (filterCondition) => {
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 500
+    flex:1,
+    minHeight: '100%'
+  },
+  scrollContainer: {
+    flex:1,
+    flexGrow: 1,
   },
   innercontainer: {
+    flex:1,
     padding: 15,
     marginBottom: 50,
-    zIndex: -1
+    //zIndex: -1
   },
   title: {
     fontSize: 16,
@@ -360,6 +366,7 @@ const styles = StyleSheet.create({
     zIndex: 8,
   },
   searchInputContainer: {
+    paddingLeft:25,
     width: '100%',
   },
   searchInput: {

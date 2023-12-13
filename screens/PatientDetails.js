@@ -16,6 +16,7 @@ const PatientDetails = ({ navigation , route }) => {
         //console.log(json);
         const temp_data_hold = returnedJSON;
         setPatientData(temp_data_hold);
+        //console.log(temp_data_hold.phoneNumber)
         })
         .catch((getAllError) => {
         console.log(getAllError);     
@@ -102,11 +103,11 @@ const PatientDetails = ({ navigation , route }) => {
                     <Text style={styles.value}>{patientData.gender}</Text>
                 </View>
 
-                {/* Number */}
+                {/* Number 
                 <View style={[styles.singledetailwrapper, styles.flexcss]}>
                     <Text style={styles.title}>Number: </Text>
                     <Text style={styles.value}>{patientData.phoneNumber}</Text>
-                </View>
+                </View>*/}
 
                 {/* Email
                 <View style={[styles.singledetailwrapper, styles.flexcss]}>

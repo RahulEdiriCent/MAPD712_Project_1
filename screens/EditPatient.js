@@ -54,6 +54,38 @@ const EditPatient = ({ navigation, route }) => {
     }
 
     const editPatientData = async()=>{
+    
+        // Validate all fields are filled
+        if (!firstname || !lastname || !address || !age || !DOB || !department || !doctor || !genders || !condition) {
+            alert("No Field can be Left Empty");
+            return;
+        }
+
+        //check age is a number
+        if (isNaN(age)) {
+            alert("Age must be a Number: No Other Characters");
+            return;
+        }
+
+        /*/check phone number is a number and is of correct length || !phonenumber
+        if (isNaN(phonenumber) || phonenumber.length < 10) {
+            alert("Invalid Phone Number");
+            return;
+        }*/
+    
+        // Validate gender
+        if (!["Male", "Female"].includes(gender)) {
+            alert("Gender must be Male or Female");
+            return;
+        }
+    
+        // Validate Name Fields make sure they don't have numbers
+        if (/\d/.test(lastname) || /\d/.test(firstname) || /\d/.test(doctor)) {
+            alert("Names (Patient or Doctor) cannot contain numbers");
+            return;
+        }
+
+        console.log(phonenumber)
         //replace with proper api ip
         await fetch(FETCHAPILINK+patientid , {
             method: 'PUT',
@@ -62,11 +94,12 @@ const EditPatient = ({ navigation, route }) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                patientId: patientid, //change later to be auto-number
+                patientId: patientid, 
                 firstName: firstname,
                 lastName: lastname,
                 age: Number(age),
                 gender:gender,
+                phonenumber:phonenumber,
                 address: address,
                 date_of_birth: DOB,
                 department: department,
@@ -162,7 +195,7 @@ const EditPatient = ({ navigation, route }) => {
                     />
                 </View>
                
-                <View style={styles.inputwrapper}>
+                {/*<View style={styles.inputwrapper}>
                     <Text style={styles.inputlabel}>Phone number</Text>
                     <TextInput
                         style={styles.input}
@@ -170,7 +203,7 @@ const EditPatient = ({ navigation, route }) => {
                         onChangeText={(text) => setPhonenumber(text)}
                         placeholder="Enter new patient Phone number"
                     />
-                </View>
+                </View>*/}
 
                 <View style={styles.inputwrapper}>
                     <Text style={styles.inputlabel}>Department</Text>
